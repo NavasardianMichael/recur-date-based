@@ -1,6 +1,5 @@
-export const sum = (a: number, b: number) => {
-  if ('development' === process.env.NODE_ENV) {
-    console.log('booppok');
-  }
-  return a + b;
-};
+import genRecurDateList from "./core/genRecurDateList";
+import genRecurDateBasedList from "./core/genRecurDateBasedList";
+
+exports.genRecurDateList = genRecurDateList
+exports.genRecurDateBasedList = genRecurDateBasedList

@@ -1,3 +1,3 @@
 const package = require('./dist')
 
-console.log(package.sum(1,7))
+console.log(package.genRecurDateList('05-08-2022'))

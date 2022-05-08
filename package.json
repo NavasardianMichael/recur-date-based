@@ -11,15 +11,16 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
+    "start": "nodemon playground",
+    "watch": "tsdx watch",
     "build": "tsdx build",
     "prepare": "tsdx build"
   },
-  "peerDependencies": {},
   "name": "recur-date-based",
   "author": "NavasardianMichael",
   "module": "dist/recur-date-based.esm.js",
   "devDependencies": {
+    "nodemon": "^2.0.16",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.0",
     "typescript": "^4.6.4"
