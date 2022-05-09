@@ -1,9 +1,10 @@
+import { D_Args } from "../../constants/defaults";
 import { T_Args } from "../../types/commons"
 
 export default function genRecurDateList({
-    date,
-    interval = 1,
-    intervalType = "Day" 
+    date = D_Args.date,
+    interval = D_Args.interval,
+    intervalType = D_Args.intervalType,
 }: T_Args) {
 
     console.log({interval, intervalType});

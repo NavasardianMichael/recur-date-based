@@ -18,6 +18,7 @@
   },
   "name": "recur-date-based",
   "author": "NavasardianMichael",
+  "keywords": ["recurring", "date", "array"],
   "module": "dist/recur-date-based.esm.js",
   "devDependencies": {
     "nodemon": "^2.0.16",
