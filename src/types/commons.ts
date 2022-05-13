@@ -1,15 +1,15 @@
 export type T_CoreInitialArgs = {
     start: string,
+    end?: number | string
     interval?: number,
     intervalType?: keyof typeof E_IntervalTypes,
-    end?: number | string
 }
 
 export type T_CoreArgs = {
-    start: string,
+    start: Date,
+    end: Date,
     interval: number,
     intervalType: keyof typeof E_IntervalTypes,
-    end: string
 }
 
 export enum E_IntervalTypes {

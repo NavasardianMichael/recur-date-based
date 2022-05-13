@@ -1,23 +1,29 @@
 import { D_Args } from "../../constants/defaults";
-import { processEndDate } from "../../helpers/end";
+import { postpone } from "../../helpers/postpone";
 import { T_CoreArgs, T_CoreInitialArgs } from "../../types/commons"
 
-export default function genRecurDateList({
-    start = D_Args.start,
-    end = D_Args.end,
-    interval = D_Args.interval,
-    intervalType = D_Args.intervalType,
-}: T_CoreInitialArgs) {
+export default function genRecurDateList(args: T_CoreInitialArgs) {
     
-    const f_Args: T_CoreArgs = {
-        start: start ?? D_Args.start,
-        interval: interval ?? D_Args.interval,
-        intervalType: intervalType ?? D_Args.intervalType,
-        end: end ?? D_Args.end       
+    const f_Args = processInitialArgs(args)
+
+    return f_Args
+}
+
+export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
+    
+    const start = new Date(args.start ?? D_Args.start)
+    const interval: T_CoreArgs['interval'] = args.interval ?? D_Args.interval
+    const intervalType = args.intervalType ?? D_Args.intervalType
+
+    const processed: Omit<T_CoreArgs, 'end'> = {
+        start,
+        interval,
+        intervalType,
     }
+console.log({intervalType});
 
-    const f_End = processEndDate(f_Args)
-
-    // date.setTime( date.getTime() - date.getTimezoneOffset()*60*1000 )
-    return date
+    return {
+        ...processed,
+        end: postpone(processed)
+    }
 }
