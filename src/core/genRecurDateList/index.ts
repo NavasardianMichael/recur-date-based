@@ -4,7 +4,13 @@ import { T_CoreArgs, T_CoreInitialArgs } from "../../types/commons"
 
 export default function genRecurDateList(args: T_CoreInitialArgs) {
     
+    checkAndBreakForInvalidData(args)
+
     const f_Args = processInitialArgs(args)
+
+    let result = [f_Args.start.toDateString()]
+
+    postpone(f_Args)
 
     return f_Args
 }
@@ -20,10 +26,13 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
         interval,
         intervalType,
     }
-console.log({intervalType});
 
     return {
         ...processed,
         end: postpone(processed)
     }
+}
+
+export function checkAndBreakForInvalidData(args: T_CoreInitialArgs): void {
+    args
 }
