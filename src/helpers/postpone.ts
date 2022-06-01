@@ -1,27 +1,19 @@
-import { E_IntervalTypes } from "../types/commons";
-import { T_PostponeArgs } from "../types/postpone";
-import { cloneDate } from "./commons";
+import { E_IntervalTypes, T_CoreArgs, T_CoreInitialArgs } from "../types/commons";
 
-export function postpone({ start, interval, intervalType }: T_PostponeArgs) {
-    const clone = cloneDate(start)
+export function getEndDate({ start, interval, intervalType, end }: T_CoreInitialArgs): Date {
+    if(typeof start === 'string') return new Date(end)
 
-    switch (intervalType) {
-        case E_IntervalTypes.day:
-            clone.setDate(clone.getDate() + interval);
-            break;
-        case E_IntervalTypes.week:
-            clone.setDate(clone.getDate() + interval * 7);
-            break;
-        case E_IntervalTypes.month:
-            clone.setMonth(clone.getMonth() + interval);
-            break;
-        case E_IntervalTypes.year:
-            clone.setFullYear(clone.getFullYear() + interval);
-            break;
-        default:
-            break;
-    }
+    let f_End = new Date(start)
+    POSTPONERS[intervalType](f_End, interval * (+end))
 
-    return clone
+    return f_End
 }
 
+export const POSTPONERS: {
+    [key in E_IntervalTypes]: (date: T_CoreArgs['start'], interval: T_CoreArgs['interval']) => void
+} = {
+    [E_IntervalTypes.day]: (date, interval) => date.setDate(date.getDate() + interval),
+    [E_IntervalTypes.week]: (date, interval) => date.setDate(date.getDate() + interval * 7),
+    [E_IntervalTypes.month]: (date, interval) => date.setMonth(date.getMonth() + interval),
+    [E_IntervalTypes.year]: (date, interval) => date.setFullYear(date.getFullYear() + interval),
+}
