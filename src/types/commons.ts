@@ -1,10 +1,11 @@
 export type T_CoreInitialArgs = {
     start: string,
-    end?: number | string
+    end: number | string
     interval?: number,
     intervalType?: keyof typeof E_IntervalTypes,
     formatOptions?: Intl.DateTimeFormatOptions,
     locale?: string
+    exclude?: string[]
 }
 
 export type T_CoreArgs = {
@@ -14,6 +15,7 @@ export type T_CoreArgs = {
     intervalType: keyof typeof E_IntervalTypes,
     formatOptions: Intl.DateTimeFormatOptions
     locale: string
+    exclude: string[]
 }
 
 export enum E_IntervalTypes {

@@ -6,5 +6,6 @@ export const D_Args: T_CoreInitialArgs = {
     interval: 10,
     intervalType: "month",
     formatOptions: {},
-    locale: 'hy'
+    locale: 'en',
+    exclude: ['2011-11-14']
 }

@@ -1,8 +1,15 @@
 import { T_CoreInitialArgs } from "../types/commons";
 
-export const ERRORS = {
+export const VALIDATORS = {
     positiveInterval: {
-        text: 'The provided interval must be positive integer',
-        check: ({ interval }: T_CoreInitialArgs) => !Number.isInteger(interval) || interval <= 0
+        check: ({ interval }: T_CoreInitialArgs) => !Number.isInteger(interval) || interval <= 0,
+        errorText: 'The provided interval must be positive integer',
+    }
+}
+
+export const ERRORS = {
+    outputLimit: {
+        count: 3000,
+        errorText: 'Too many iterations!'
     }
 }
