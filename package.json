@@ -21,7 +21,9 @@
   "keywords": [
     "recurring",
     "date",
-    "array"
+    "array",
+    "expanded",
+    "list"
   ],
   "module": "dist/recur-date-based.esm.js",
   "devDependencies": {
