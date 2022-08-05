@@ -8,7 +8,7 @@ export type T_CoreInitialArgs = {
         formatOptions?: Intl.DateTimeFormatOptions
     }
     extended?: {
-        [key: string]: <T>(date: T_CoreArgs['start']) => T
+        [key: string]: (date: T_CoreArgs['start']) => any
     }
 }
 
