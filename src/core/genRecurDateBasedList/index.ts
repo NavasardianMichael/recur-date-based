@@ -1,9 +1,11 @@
 import { D_Args } from "../../constants/defaults";
 import { ERRORS, VALIDATORS } from "../../constants/errors";
 import { getEndDate, POSTPONERS } from "../../helpers/postpone";
-import { T_Core, T_CoreArgs, T_CoreInitialArgs, T_CoreReturnType } from "../../types/commons"
+import { T_CoreArgs, T_CoreInitialArgs, T_CoreReturnType } from "../../types/commons"
 
-const genRecurDateBasedList: T_Core = (args) =>  {
+type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
+
+export const genRecurDateBasedList: T_Core = (args) =>  {
     
     checkInvalidData(args)
 
@@ -16,14 +18,18 @@ const genRecurDateBasedList: T_Core = (args) =>  {
             throw ERRORS.outputLimit.errorText
         }
 
+        const dateStr = f_Args.start.toLocaleString(f_Args.localeString.lang, f_Args.localeString.formatOptions)
         let currentResult: T_CoreReturnType = {
             date: f_Args.start,
-            dateStr: f_Args.start.toLocaleString(f_Args.localeString.lang, f_Args.localeString.formatOptions)
+            dateStr
         }
 
         if(f_Args.extended) {
             for(let key in f_Args.extended) {
-                currentResult[key] = f_Args.extended[key](currentResult.date)
+                currentResult[key] = f_Args.extended[key]({
+                    date: f_Args.start,
+                    dateStr
+                })
             }
         }
 
@@ -35,7 +41,6 @@ const genRecurDateBasedList: T_Core = (args) =>  {
 }
 
 export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
-    
     return {
         start: new Date(args.start ?? D_Args.start),
         interval: args.interval ?? D_Args.interval,
@@ -51,5 +56,3 @@ export function checkInvalidData(args: T_CoreInitialArgs): void {
         if(err.check(args)) throw(err.errorText)
     })
 }
-
-export default genRecurDateBasedList
