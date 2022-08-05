@@ -27,6 +27,8 @@ export type T_CoreReturnType = {
     [key: string]: any
 }
 
+export type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
+
 export enum E_IntervalTypes {
     "day" = "day",
     "week" = "week",

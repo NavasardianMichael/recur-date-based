@@ -1,9 +1,9 @@
 import { D_Args } from "../../constants/defaults";
 import { ERRORS, VALIDATORS } from "../../constants/errors";
 import { getEndDate, POSTPONERS } from "../../helpers/postpone";
-import { T_CoreArgs, T_CoreInitialArgs, T_CoreReturnType } from "../../types/commons"
+import { T_Core, T_CoreArgs, T_CoreInitialArgs, T_CoreReturnType } from "../../types/commons"
 
-export default function genRecurDateBasedList(args: T_CoreInitialArgs) {
+const genRecurDateBasedList: T_Core = (args) =>  {
     
     checkInvalidData(args)
 
@@ -51,3 +51,5 @@ export function checkInvalidData(args: T_CoreInitialArgs): void {
         if(err.check(args)) throw(err.errorText)
     })
 }
+
+export default genRecurDateBasedList

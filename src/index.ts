@@ -1,1 +1,3 @@
-export const genRecurDateBasedList = require("./core/genRecurDateBasedList")
+import genRecurDateBasedList from "./core/genRecurDateBasedList";
+
+export { genRecurDateBasedList }
