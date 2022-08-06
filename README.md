@@ -20,8 +20,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-The project provides a unique functionality related to JavaScript dates. It allows to generate repeating dates array according to a certain shape of input data. 
-There are some recurring date utilities, such as <a target="_blank" href="https://www.npmjs.com/package/recurring-date">recurring-date</a> and <a target="_blank" href="https://www.npmjs.com/package/moment-recur">moment-recur</a> available on NPM. But the first is class based and for second <a target="_blank" href="https://www.npmjs.com/package/moment">moment</a> is a must. So I didn't find one that really suited my needs when I ran into the problem of providing such functionality․ Eventually I created this enhanced one, which is function based, suitable for TypeScript, and does not need additional mapping for custom data.
+The project provides a unique functionality related to JavaScript dates. It allows to generate repeating dates array according to a certain shape of input data. Its name is in harmony with its essence: the exported function gives an opportunity to generate additional properties (except of dates) based on the date of the current iteration.
+There are some recurring date utilities, such as <a target="_blank" href="https://www.npmjs.com/package/recurring-date">recurring-date</a> and <a target="_blank" href="https://www.npmjs.com/package/moment-recur">moment-recur</a> available on NPM. But the first is class based and for second the <a target="_blank" href="https://www.npmjs.com/package/moment">moment</a> is a must. So I didn't find one that really suited my needs when I ran into the problem of providing such functionality․ Eventually I created this enhanced one, which is function based, suitable for TypeScript, and does not need additional mapping for custom data.
 
 
 Of course, it is new and there can be some missing cases of logic. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.

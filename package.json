@@ -1,5 +1,5 @@
 {
-  "version": "0.2.3",
+  "version": "0.2.4",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -19,12 +19,17 @@
   "name": "recur-date-based",
   "author": "NavasardianMichael",
   "keywords": [
-    "recurring",
-    "date",
-    "array",
-    "expanded",
-    "list"
+    "multiply",
+    "recur",
+    "repeat",
+    "dates",
+    "days",
+    "weeks",
+    "months",
+    "additional",
+    "occurences"
   ],
+  "description": "The genRecurDateBased function allows to generate repeating dates according to a certain shape of input data. The result is an array which consists of objects containing the current recurred data in both javascript Date and string formats. Other expanded props based on current iteration date can be generated as well.",
   "module": "dist/recur-date-based.esm.js",
   "devDependencies": {
     "nodemon": "^2.0.16",
