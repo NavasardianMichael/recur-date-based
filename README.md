@@ -43,7 +43,7 @@ Here are presented all the available props the exported function accepts.
 | Ppropery                   | Type                 | Description  | Default    |
 | -------------------------- | -------------        | ------------ | ----------- |
 | start                      | string               | the start date string in ISO format | today        |
-| end                        | number or string      | occurences count or the end date string in ISO format | 100        |
+| end                        | number or string      | occurences count or the end date string in ISO format. The number larger than 9999 is not applicable. | 100 |
 | interval                   | number      | repeat by some interval | 10 |
 | intervalType               | day / week / month / year | interval measue unit | day |
 | localeString.lang          | string | the first argument that recieves the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">Date.toLocaleString</a> function | null |
@@ -116,6 +116,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Michael Navasardyan - <a target="_blank" href='mailto:navasardianmichael@gmail.com'>navasardianmichael@gmail.com</a> | <a target="_blank" href='https://www.linkedin.com/in/michael-navasardyan'>linkedin profile</a>
+Michael Navasardyan - <a target="_blank" href='mailto:navasardianmichael@gmail.com'>navasardianmichael@gmail.com</a> | <a target="_blank" href='https://www.linkedin.com/in/michael-navasardyan'>linkedin</a>
 
 Project Link: [https://github.com/NavasardianMichael/recur-date-based](https://github.com/NavasardianMichael/recur-date-based)
