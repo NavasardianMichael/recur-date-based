@@ -4,11 +4,11 @@ console.log(package.genRecurDateBasedList({
     start: '2022-07-01T19:00:00',
     interval: 3,
     intervalType: 'week',
-    end: '2022-07-30T19:00:00',
+    end: 99999,
     localeString: {
-        lang: 'ru-RU',
+        lang: 'fr-CH',
         formatOptions: {
-            timeZone: 'Europe/Moscow',
+            timeZone: 'America/New_York',
             hourCycle: 'h24',
             year: "numeric",
             month: "2-digit",
@@ -19,7 +19,7 @@ console.log(package.genRecurDateBasedList({
         }
     },
     extended: {
-        isValid: (start) => start + '11111111111111111',
-        isValid2: (start) => start + '*9999999999999'
+        isMonday: ({date}) => date.getDay() === 1,
+        toDateOnly: ({dateStr}) => dateStr.substring(0, 8),
     }
 }))

@@ -1,10 +1,12 @@
+import { D_Args } from "../constants/defaults";
+import { ERRORS } from "../constants/errors";
 import { E_IntervalTypes, T_CoreArgs, T_CoreInitialArgs } from "../types/commons";
 
 export function getEndDate({ start, interval, intervalType, end }: T_CoreInitialArgs): Date {
-    if(typeof start === 'string') return new Date(end)
+    if(typeof end === 'string') return new Date(end)
 
     let f_End = new Date(start)
-    POSTPONERS[intervalType](f_End, interval * (+end))
+    POSTPONERS[intervalType](f_End, interval * Math.min(+end ?? +D_Args.end, ERRORS.outputLimit.count - 1))
 
     return f_End
 }

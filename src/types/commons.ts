@@ -1,6 +1,6 @@
 export type T_CoreInitialArgs = {
-    start: string,
-    end: number | string
+    start?: string,
+    end?: number | string
     interval?: number,
     intervalType?: keyof typeof E_IntervalTypes,
     localeString?: {
