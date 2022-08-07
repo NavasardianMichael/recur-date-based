@@ -1,4 +1,4 @@
-<details>
+<details open>
   <summary>Table of Contents</summary>
   <ol>
     <li>
@@ -50,7 +50,9 @@ Here are presented all the available props the exported function accepts.
 | localeString.formatOptions          | Intl.DateTimeFormatOptions | the second argument that recieves the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">Date.toLocaleString</a> function | null |
 | extended                   | { [key: string]: (args: {date: Date, dateStr: Date}) => any } | The object accepts provided functions under any string key. The function receives an object with date and dateStr options in the current iteration. This can help to generate extended properties based on current occurence | null |
 
+
 Check out an example.
+
 
 ```sh
 import { genRecurDateBasedList } from 'recur-date-based';
