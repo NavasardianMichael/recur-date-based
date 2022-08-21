@@ -71,7 +71,7 @@ genRecurDateBasedList({
   extended: {
     isMonday: ({date, dateStr}) => date.getDay() === 1,
   }
-}
+})
 ```
 
 The result is an array consisting of objects. The latters always include "dateStr" property and extended ones optionally. Check out the result.
