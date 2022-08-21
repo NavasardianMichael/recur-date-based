@@ -4,9 +4,5 @@ export const D_Args: T_CoreInitialArgs = {
     start: new Date().toDateString(),
     end: 100,
     interval: 10,
-    intervalType: E_IntervalTypes.day,
-    localeString: {
-        lang: 'en',
-        formatOptions: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-    }
+    intervalType: E_IntervalTypes.day
 }

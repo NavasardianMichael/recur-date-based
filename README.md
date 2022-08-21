@@ -38,7 +38,7 @@ npm install recur-date-based
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Here are presented all the available props the exported function accepts.
+Here are presented all the available parameters the exported function accepts.
 
 | Ppropery                   | Type                 | Description  | Default    |
 | -------------------------- | -------------        | ------------ | ----------- |
@@ -58,23 +58,34 @@ Check out an example.
 import { genRecurDateBasedList } from 'recur-date-based';
 
 genRecurDateBasedList({
-    start: '2022-07-01T19:00:00',
-    interval: 3,
-    intervalType: 'week',
-    end: '2022-07-30T19:00:00',
-    localeString: {
-      lang: 'fr-CH',
-      formatOptions: {
-        timeZone: 'America/New_York',
-        hourCycle: 'h24'
-      }
-    },
-    extended: {
-      isMonday: ({date}) => date.getDay() === 1,
-      getDateOnly: ({dateStr}) => dateStr.substring(0, 8),
+  start: '2022-01-01T00:00:00',
+  interval: 3,
+  intervalType: 'day',
+  end: '2022-01-15T00:00:00',
+  localeString: {
+    lang: 'en-US',
+    formatOptions: {
+      hourCycle: 'h24'
     }
+  },
+  extended: {
+    isMonday: ({date, dateStr}) => date.getDay() === 1,
+  }
 }
 ```
+
+The result is an array consisting of objects. The latters always include "dateStr" property and extended ones optionally. Check out the result.
+
+```sh
+[
+  { dateStr: '1/1/2022, 24:00:00', isMonday: false },
+  { dateStr: '1/4/2022, 24:00:00', isMonday: false },
+  { dateStr: '1/7/2022, 24:00:00', isMonday: false },
+  { dateStr: '1/10/2022, 24:00:00', isMonday: true },
+  { dateStr: '1/13/2022, 24:00:00', isMonday: false }
+]
+```
+
 
 <!-- ROADMAP -->
 ## Roadmap
