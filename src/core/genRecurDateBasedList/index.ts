@@ -12,7 +12,6 @@ export const genRecurDateBasedList: T_Core = (args) =>  {
     let f_Args = processInitialArgs(args)
 
     let result: T_CoreReturnType[] = []
-    console.log(f_Args.end);
     
     while(f_Args.start < f_Args.end) {
         if(result.length === ERRORS.outputLimit.count) {
