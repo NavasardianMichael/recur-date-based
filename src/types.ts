@@ -34,3 +34,5 @@ export enum E_IntervalTypes {
     "month" = "month",
     "year" = "year"
 }
+
+export type T_PostponeArgs = Pick<T_CoreArgs, 'start' | 'interval' | 'intervalType'>

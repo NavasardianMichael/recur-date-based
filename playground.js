@@ -1,3 +1,3 @@
 const package = require('./dist')
 
-console.log(package.genRecurDateBasedList({}))
+console.log(package.genRecurDateBasedList())

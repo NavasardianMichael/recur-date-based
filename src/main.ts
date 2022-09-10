@@ -1,9 +1,6 @@
-import { D_Args } from "../../constants/defaults";
-import { ERRORS, VALIDATORS } from "../../constants/errors";
-import { getEndDate, POSTPONERS } from "../../helpers/postpone";
-import { T_CoreArgs, T_CoreInitialArgs, T_CoreReturnType } from "../../types/commons"
-
-type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
+import { D_Args, ERRORS, VALIDATORS } from "./constants"
+import { T_Core, T_CoreArgs, T_CoreInitialArgs, T_CoreReturnType } from "./types"
+import { getEndDate, POSTPONERS } from "./utils"
 
 export const genRecurDateBasedList: T_Core = (args) =>  {
     
@@ -41,12 +38,12 @@ export const genRecurDateBasedList: T_Core = (args) =>  {
 
 export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
     return {
-        start: new Date(args.start ?? D_Args.start),
-        interval: args.interval ?? D_Args.interval,
-        intervalType: args.intervalType ?? D_Args.intervalType,
-        end: getEndDate(args),
-        localeString: args.localeString ?? D_Args.localeString,
-        extended: args.extended
+        start: new Date(args?.start ?? D_Args.start),
+        interval: args?.interval ?? D_Args.interval,
+        intervalType: args?.intervalType ?? D_Args.intervalType,
+        end: getEndDate(args ?? D_Args),
+        localeString: args?.localeString ?? D_Args.localeString,
+        extended: args?.extended
     }
 }
 

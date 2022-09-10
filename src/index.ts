@@ -1,3 +1,3 @@
-import { genRecurDateBasedList } from "./core/genRecurDateBasedList";
+import { genRecurDateBasedList } from "./main";
 
 export { genRecurDateBasedList }

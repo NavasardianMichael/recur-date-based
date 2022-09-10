@@ -1,6 +1,9 @@
-import { D_Args } from "../constants/defaults";
-import { ERRORS } from "../constants/errors";
-import { E_IntervalTypes, T_CoreArgs, T_CoreInitialArgs } from "../types/commons";
+import { D_Args, ERRORS } from "./constants"
+import { E_IntervalTypes, T_CoreArgs, T_CoreInitialArgs } from "./types"
+
+export function cloneDate(date: Date): Date {
+    return new Date(date.getTime())
+}
 
 export function getEndDate({ 
     start = D_Args.start, 

@@ -1,4 +1,4 @@
-import { T_CoreArgs } from "../types/commons";
+import { E_IntervalTypes, T_CoreArgs, T_CoreInitialArgs } from "./types"
 
 export const VALIDATORS = {
     positiveInterval: {
@@ -12,4 +12,14 @@ export const ERRORS = {
         count: 10000,
         errorText: 'Too many iterations!'
     }
+}
+
+export const D_Args: T_CoreInitialArgs = {
+    start: new Date().toDateString(),
+    end: 100,
+    interval: 1,
+    intervalType: E_IntervalTypes.day,
+    localeString: {
+        lang: 'en-US'
+    },
 }
