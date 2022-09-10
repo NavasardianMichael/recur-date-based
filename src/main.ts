@@ -1,6 +1,6 @@
-import { D_Args, ERRORS, VALIDATORS } from "./constants"
-import { T_Core, T_CoreArgs, T_CoreInitialArgs, T_CoreReturnType } from "./types"
-import { getEndDate, POSTPONERS } from "./utils"
+import { ERRORS } from "./constants"
+import { T_Core, T_CoreReturnType, T_PostponeArgs } from "./types"
+import { checkInvalidData, POSTPONERS, processInitialArgs } from "./utils"
 
 export const genRecurDateBasedList: T_Core = (args) =>  {
     
@@ -9,46 +9,46 @@ export const genRecurDateBasedList: T_Core = (args) =>  {
     checkInvalidData(f_Args)
 
     let result: T_CoreReturnType[] = []
+    let iterations: number = 0 
     
     while(f_Args.start < f_Args.end) {
-        if(result.length === ERRORS.outputLimit.count) {
-            throw ERRORS.outputLimit.errorText
+        iterations++
+
+        if(iterations === ERRORS.outputLimit.count) {
+            throw `${ERRORS.outputLimit.errorText} (${iterations}))`
         }
 
         let currentResult: T_CoreReturnType = {
             dateStr: f_Args.start.toLocaleString(f_Args.localeString.lang, f_Args.localeString.formatOptions)
         }
 
+        const postpone = (date: T_PostponeArgs['start']) => {
+            POSTPONERS[f_Args.intervalType](date, f_Args.interval);
+        }
+
+        const callbackArgs = {
+            date: f_Args.start,
+            dateStr: currentResult.dateStr
+        }
+
+        if(f_Args.exclude) {                        
+            postpone(f_Args.start)
+            if(f_Args.exclude(callbackArgs) === true) {                
+                if(typeof f_Args.end === 'number') postpone(f_Args.end)
+                continue
+            }
+        }
+
         if(f_Args.extended) {
             for(let key in f_Args.extended) {
-                currentResult[key] = f_Args.extended[key]({
-                    date: f_Args.start,
-                    dateStr: currentResult.dateStr
-                })
+                currentResult[key] = f_Args.extended[key](callbackArgs)
             }
         }
 
         result.push(currentResult)
         
-        POSTPONERS[f_Args.intervalType](f_Args.start, f_Args.interval)
+        postpone(f_Args.start)
     }
 
     return result
-}
-
-export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
-    return {
-        start: new Date(args?.start ?? D_Args.start),
-        interval: args?.interval ?? D_Args.interval,
-        intervalType: args?.intervalType ?? D_Args.intervalType,
-        end: getEndDate(args ?? D_Args),
-        localeString: args?.localeString ?? D_Args.localeString,
-        extended: args?.extended
-    }
-}
-
-export function checkInvalidData(args: T_CoreArgs): void {
-    Object.values(VALIDATORS).forEach(err => {
-        if(err.check(args)) throw(err.errorText)
-    })
 }

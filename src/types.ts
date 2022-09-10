@@ -1,12 +1,13 @@
 export type T_CoreInitialArgs = {
     start?: string,
     end?: number | string
-    interval?: number,
-    intervalType?: keyof typeof E_IntervalTypes,
+    interval?: number
+    intervalType?: keyof typeof E_IntervalTypes
     localeString?: {
         lang?: string
         formatOptions?: Intl.DateTimeFormatOptions
-    }
+    },
+    exclude?: (args: Pick<T_CoreReturnType, 'date' | 'dateStr'>) => boolean,
     extended?: {
         [key: string]: (args: Pick<T_CoreReturnType, 'date' | 'dateStr'>) => any
     }
@@ -19,6 +20,7 @@ export type T_CoreArgs = {
     intervalType: T_CoreInitialArgs['intervalType'],
     localeString: T_CoreInitialArgs['localeString']
     extended?: T_CoreInitialArgs['extended']
+    exclude?: T_CoreInitialArgs['exclude']
 }
 
 export type T_CoreReturnType = {

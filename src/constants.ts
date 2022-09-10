@@ -10,7 +10,7 @@ export const VALIDATORS = {
 export const ERRORS = {
     outputLimit: {
         count: 10000,
-        errorText: 'Too many iterations!'
+        errorText: 'Too many iterations! It has exceeded 99999'
     }
 }
 
