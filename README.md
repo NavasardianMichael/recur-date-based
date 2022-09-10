@@ -95,7 +95,7 @@ The result is an array consisting of objects. The latters always include "dateSt
 
 - [x] Finalize the initial version
 - [x] Add extended props callbacks
-- [ ] Add exclude functionality
+- [x] Add exclude functionality
 - [ ] Support other intervalTypes
 - [ ] Support date short formatting (e.g. dd/mm/yyyy)
 
@@ -126,6 +126,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Michael Navasardyan - <a target="_blank" href='mailto:navasardianmichael@gmail.com'>navasardianmichael@gmail.com</a> | <a target="_blank" href='https://www.linkedin.com/in/michael-navasardyan'>linkedin</a>
+Michael Navasardyan - <a target="_blank" href='mailto:navasardianmichael@gmail.com'>navasardianmichael@gmail.com</a>
 
 Project Link: [https://github.com/NavasardianMichael/recur-date-based](https://github.com/NavasardianMichael/recur-date-based)
