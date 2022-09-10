@@ -7,9 +7,9 @@ type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
 
 export const genRecurDateBasedList: T_Core = (args) =>  {
     
-    checkInvalidData(args)
-
     let f_Args = processInitialArgs(args)
+
+    checkInvalidData(f_Args)
 
     let result: T_CoreReturnType[] = []
     
@@ -50,7 +50,7 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
     }
 }
 
-export function checkInvalidData(args: T_CoreInitialArgs): void {
+export function checkInvalidData(args: T_CoreArgs): void {
     Object.values(VALIDATORS).forEach(err => {
         if(err.check(args)) throw(err.errorText)
     })
