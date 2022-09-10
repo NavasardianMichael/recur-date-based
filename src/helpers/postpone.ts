@@ -3,6 +3,8 @@ import { ERRORS } from "../constants/errors";
 import { E_IntervalTypes, T_CoreArgs, T_CoreInitialArgs } from "../types/commons";
 
 export function getEndDate({ start, interval, intervalType, end }: T_CoreInitialArgs): Date {
+    if(end == null) end = D_Args.end 
+    
     if(typeof end === 'string') return new Date(end)
 
     let f_End = new Date(start)
