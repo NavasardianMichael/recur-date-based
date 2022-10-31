@@ -1,5 +1,5 @@
 {
-  "version": "1.0.6",
+  "version": "1.0.7",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -23,9 +23,11 @@
     "repeating dates",
     "multiple times",
     "props by date",
-    "occurences"
+    "occurences",
+    "javascript library",
+    "date package"
   ],
-  "description": "Generates recurring dates and extended props based on them, according to a certain shape of input data. The result is an array which consists of objects containing the current recurred data in both javascript Date and string formats. Other expanded props based on current iteration date can be generated as well.",
+  "description": "Generate recurring dates and extended props based on them, according to a certain shape of input data. The result is an array which consists of objects containing the current recurred data in both javascript Date and string formats. Other expanded props based on current iteration date can be generated as well.",
   "module": "dist/recur-date-based.esm.js",
   "devDependencies": {
     "nodemon": "^2.0.16",
