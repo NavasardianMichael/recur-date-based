@@ -46,7 +46,7 @@ Here are presented all the available parameters the exported function accepts.
 | end                        | number or string      | occurences count or the end date string in ISO format. The number larger than 99999 is not applicable. | 100 |
 | interval                   | number      | repeat by some interval | 1 |
 | intervalType               | minute / hour / day / week / month / year | interval measue unit | day |
-| localeString.lang          | string | the first argument that recieves the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">Date.toLocaleString</a> function | null |
+| localeString.lang          | string | the first argument that recieves the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">Date.toLocaleString</a> function | en-US |
 | localeString.formatOptions          | Intl.DateTimeFormatOptions | the second argument that recieves the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">Date.toLocaleString</a> function | null |
 | exclude                   | (args: {date: Date, dateStr: string}) => boolean | Custom filter function  | null |
 | extended                   | { [key: string]: (args: {date: Date, dateStr: string}) => any } | The object accepts provided functions under string keys. The function receives an object with date and dateStr options in the current iteration. This can help to generate extended properties based on current occurence | null |
