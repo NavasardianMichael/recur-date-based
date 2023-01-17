@@ -23,6 +23,8 @@ export function getEndDate({
 export const POSTPONERS: {
     [key in E_IntervalTypes]: (date: T_CoreArgs['start'], interval: T_CoreArgs['interval']) => void
 } = {
+    [E_IntervalTypes.minute]: (date, interval) => date.setMinutes(date.getMinutes() + interval),
+    [E_IntervalTypes.hour]: (date, interval) => date.setHours(date.getHours() + interval),
     [E_IntervalTypes.day]: (date, interval) => date.setDate(date.getDate() + interval),
     [E_IntervalTypes.week]: (date, interval) => date.setDate(date.getDate() + interval * 7),
     [E_IntervalTypes.month]: (date, interval) => date.setMonth(date.getMonth() + interval),
@@ -36,7 +38,7 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
         intervalType: args?.intervalType ?? D_Args.intervalType,
         end: getEndDate(args ?? D_Args),
         localeString: args?.localeString ?? D_Args.localeString,
-        extended: args?.extended,
+        extend: args?.extend,
         exclude: args?.exclude
     }
 }

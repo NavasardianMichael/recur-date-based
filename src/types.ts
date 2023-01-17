@@ -8,7 +8,7 @@ export type T_CoreInitialArgs = {
         formatOptions?: Intl.DateTimeFormatOptions
     },
     exclude?: (args: Pick<T_CoreReturnType, 'date' | 'dateStr'>) => boolean,
-    extended?: {
+    extend?: {
         [key: string]: (args: Pick<T_CoreReturnType, 'date' | 'dateStr'>) => any
     }
 }
@@ -16,21 +16,24 @@ export type T_CoreInitialArgs = {
 export type T_CoreArgs = {
     start: Date,
     end: Date,
-    interval: T_CoreInitialArgs['interval'],
-    intervalType: T_CoreInitialArgs['intervalType'],
+    interval: T_CoreInitialArgs['interval']
+    intervalType: T_CoreInitialArgs['intervalType']
     localeString: T_CoreInitialArgs['localeString']
-    extended?: T_CoreInitialArgs['extended']
+    extend?: T_CoreInitialArgs['extend']
     exclude?: T_CoreInitialArgs['exclude']
 }
 
 export type T_CoreReturnType = {
-    dateStr: string
+    dateStr?: string
+    date?: Date
     [key: string]: any
 }
 
 export type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
 
 export enum E_IntervalTypes {
+    "minute" = "minute",
+    "hour" = "hour",
     "day" = "day",
     "week" = "week",
     "month" = "month",

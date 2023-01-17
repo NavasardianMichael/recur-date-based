@@ -43,13 +43,13 @@ Here are presented all the available parameters the exported function accepts.
 | Ppropery                   | Type                 | Description  | Default    |
 | -------------------------- | -------------        | ------------ | ----------- |
 | start                      | string               | the start date string in ISO format | today        |
-| end                        | number or string      | occurences count or the end date string in ISO format. The number larger than 9999 is not applicable. | 100 |
-| interval                   | number      | repeat by some interval | 10 |
-| intervalType               | day / week / month / year | interval measue unit | day |
+| end                        | number or string      | occurences count or the end date string in ISO format. The number larger than 99999 is not applicable. | 100 |
+| interval                   | number      | repeat by some interval | 1 |
+| intervalType               | minute / hour / day / week / month / year | interval measue unit | day |
 | localeString.lang          | string | the first argument that recieves the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">Date.toLocaleString</a> function | null |
 | localeString.formatOptions          | Intl.DateTimeFormatOptions | the second argument that recieves the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">Date.toLocaleString</a> function | null |
-| exclude                   | (args: {date: Date, dateStr: Date}) => boolean | Custom filter function  | null |
-| extended                   | { [key: string]: (args: {date: Date, dateStr: Date}) => any } | The object accepts provided functions under string keys. The function receives an object with date and dateStr options in the current iteration. This can help to generate extended properties based on current occurence | null |
+| exclude                   | (args: {date: Date, dateStr: string}) => boolean | Custom filter function  | null |
+| extended                   | { [key: string]: (args: {date: Date, dateStr: string}) => any } | The object accepts provided functions under string keys. The function receives an object with date and dateStr options in the current iteration. This can help to generate extended properties based on current occurence | null |
 
 
 Check out an example.
@@ -71,7 +71,7 @@ genRecurDateBasedList({
   },
   *// Filtering only upcoming dates*
   exclude: ({date, dateStr}) => date < new Date(),
-  extended: {
+  extend: {
     isMonday: ({date, dateStr}) => date.getDay() === 1,
   }
 })
@@ -96,7 +96,7 @@ The result is an array consisting of objects. The latters always include "dateSt
 - [x] Finalize the initial version
 - [x] Add extended props callbacks
 - [x] Add exclude functionality
-- [ ] Support other intervalTypes
+- [x] Support other intervalTypes
 - [ ] Support date short formatting (e.g. dd/mm/yyyy)
 
 See the [open issues](https://github.com/NavasardianMichael/recur-date-based/issues) for a full list of proposed features (and known issues).

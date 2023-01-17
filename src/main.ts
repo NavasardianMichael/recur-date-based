@@ -14,7 +14,7 @@ export const genRecurDateBasedList: T_Core = (args) =>  {
     while(f_Args.start < f_Args.end) {
         iterations++
 
-        if(iterations === ERRORS.outputLimit.count) {
+        if(iterations === ERRORS.outputLimit.count) {           
             throw `${ERRORS.outputLimit.errorText} (${iterations}))`
         }
 
@@ -33,15 +33,15 @@ export const genRecurDateBasedList: T_Core = (args) =>  {
 
         if(f_Args.exclude) {                        
             postpone(f_Args.start)
-            if(f_Args.exclude(callbackArgs) === true) {                
+            if(f_Args.exclude(callbackArgs) === true) {
                 if(typeof f_Args.end === 'number') postpone(f_Args.end)
                 continue
             }
         }
 
-        if(f_Args.extended) {
-            for(let key in f_Args.extended) {
-                currentResult[key] = f_Args.extended[key](callbackArgs)
+        if(f_Args.extend) {
+            for(let key in f_Args.extend) {
+                currentResult[key] = f_Args.extend[key](callbackArgs)
             }
         }
 
