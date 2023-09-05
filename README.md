@@ -46,7 +46,7 @@ Here are presented all the available parameters the exported function accepts.
 | end                        | `number` or `string`      | Occurrences count or the end date string in ISO format. The number larger than 99999 is not applicable. | `100` |
 | interval                   | `number`      | Repeat by some interval. | `1` |
 | intervalType               | `'millisecond' / 'minute' / 'hour' / 'day' / 'week' / 'month' / 'year'` | Interval unit name. | `'day'` |
-| numericTimezone            | `number` | A numeric representation of the timezone, according to which dates will be constructed. Take into account that the provided value must in a specifig range -12 to 12.  | user's timezone |
+| numericTimezone            | `number` | A numeric representation of the timezone, according to which dates will be constructed. Take into account that the provided value must in a specific range -12 to 12.  | user's timezone |
 | direction                  | `'forward' / 'backward'` | Whether the dates are repeated to the past or to the future. | `'forward'` |
 | localeString.lang          | `string`                 | The first argument that receives the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">`Date.toLocaleString`</a> function. | `null` |
 | localeString.formatOptions          | `Intl.DateTimeFormatOptions` | The second argument that receives the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">`Date.toLocaleString`</a> function. | `null` |
