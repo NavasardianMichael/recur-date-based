@@ -1,53 +1,76 @@
-import { ERRORS } from "./constants"
-import { T_Core, T_CoreReturnType, T_PostponeArgs } from "./types"
-import { checkInvalidData, POSTPONERS, processInitialArgs } from "./utils"
+import { DEFAULT_ARGS, ERRORS, POSTPONERS } from "./helpers/constants/constants"
+import { toAdjustedTimezoneISOString } from "./helpers/functions/dates"
+import { checkInvalidData, processInitialArgs } from "./helpers/functions/lib"
+import { E_Direction, T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from "./helpers/types/types"
 
-export const genRecurDateBasedList: T_Core = (args) =>  {
+export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
     
-    let f_Args = processInitialArgs(args)
-
-    checkInvalidData(f_Args)
-
-    let result: T_CoreReturnType[] = []
-    let iterations: number = 0 
+    const result: T_CoreReturnType[] = []
     
-    while(f_Args.start < f_Args.end) {
-        iterations++
-
-        if(iterations === ERRORS.outputLimit.count) {           
-            throw `${ERRORS.outputLimit.errorText} (${iterations}))`
-        }
-
-        let currentResult: T_CoreReturnType = {
-            dateStr: f_Args.start.toLocaleString(f_Args.localeString.lang, f_Args.localeString.formatOptions)
-        }
-
+    try {
+        checkInvalidData(args)
+        
+        const f_Args = processInitialArgs(args)
+        
+        const isDirectionForward = f_Args.direction === E_Direction.forward
+        let iterations: number = 0 
+        const postponeByDirection = POSTPONERS[f_Args.direction]
         const postpone = (date: T_PostponeArgs['start']) => {
-            POSTPONERS[f_Args.intervalType](date, f_Args.interval);
+            postponeByDirection[f_Args.intervalType](date, f_Args.interval);
         }
 
-        const callbackArgs = {
-            date: f_Args.start,
-            dateStr: currentResult.dateStr
-        }
+        while(
+            isDirectionForward ?
+            f_Args.start < f_Args.end :
+            f_Args.start > f_Args.end
+        ) {
+            iterations++
 
-        if(f_Args.exclude) {                        
-            postpone(f_Args.start)
-            if(f_Args.exclude(callbackArgs) === true) {
+            if(iterations === ERRORS.outputLimit.count) {
+                throw new Error(ERRORS.outputLimit.errorText)
+            }
+
+            const currentResult: T_CoreReturnType = {
+                dateStr: (
+                    f_Args.localeString ?
+                    f_Args.start.toLocaleString(f_Args.localeString?.lang, f_Args.localeString?.formatOptions) :
+                    toAdjustedTimezoneISOString(f_Args.start)
+                )
+            }
+
+            const callbackArgs = {
+                date: f_Args.start,
+                dateStr: currentResult.dateStr
+            }
+
+            if(
+                f_Args.exclude &&
+                f_Args.exclude(callbackArgs) === true
+            ) {
+                postpone(f_Args.start)
                 if(typeof f_Args.end === 'number') postpone(f_Args.end)
+                iterations++
                 continue
             }
-        }
 
-        if(f_Args.extend) {
-            for(let key in f_Args.extend) {
-                currentResult[key] = f_Args.extend[key](callbackArgs)
+            if(f_Args.extend) {
+                for(const key in f_Args.extend) {
+                    currentResult[key] = f_Args.extend[key](callbackArgs)
+                }
             }
-        }
 
-        result.push(currentResult)
+            result.push(currentResult)
+            
+            postpone(f_Args.start)
+        }
+    } catch (e) {
+        const error = e as T_Error
         
-        postpone(f_Args.start)
+        if(args.onError && typeof args.onError === 'function') {
+            args.onError(error);
+        } else {
+            throw new Error(error.message)
+        }
     }
 
     return result
