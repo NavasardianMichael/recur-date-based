@@ -17,11 +17,13 @@
 
 
 
+
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-The project provides a unique functionality related to JavaScript dates. It allows to generate repeating dates array according to a certain shape of input data. Its name is in harmony with its essence: the exported function gives an opportunity to generate additional properties (except of dates) based on the date of the current iteration.
-There are some recurring date utilities, such as <a target="_blank" href="https://www.npmjs.com/package/recurring-date">recurring-date</a> and <a target="_blank" href="https://www.npmjs.com/package/moment-recur">moment-recur</a> available on NPM. But the first is class based and for second the <a target="_blank" href="https://www.npmjs.com/package/moment">moment</a> is a must. So I didn't find any package that really suited my needs, when I ran into the problem of providing such functionality․ Eventually I created this enhanced one, which is function based, suitable for TypeScript, and does not need additional mapping for custom data.
+The project provides a unique functionality related to JavaScript dates. It allows to generate recurring dates based on a certain input shape. Its name is in harmony with its essence: the exported function gives an opportunity to generate additional properties based on the date of the current iteration.
+
+There are some recurring date utilities, such as <a target="_blank" href="https://www.npmjs.com/package/recurring-date">recurring-date</a> and <a target="_blank" href="https://www.npmjs.com/package/moment-recur">moment-recur</a> available on NPM. But the first is class based and for second the <a target="_blank" href="https://www.npmjs.com/package/moment">moment</a> is a must. So I didn't find any package that really suited my needs, when I ran into the problem of providing such functionality․ Eventually I created this enhanced one, which is function based, suitable for TypeScript, and does not need additional mapping for extra properties.
 
 
 If you have some idea about the next features of the current package, please suggest changes by forking this repo and creating a pull request or opening an issue.
@@ -43,16 +45,16 @@ Here are presented all the available parameters the exported function accepts.
 | Property                   | Type                 | Description  | Default    |
 | -------------------------- | -------------        | ------------ | ----------- |
 | start                      | `string` or `Date`       | The start date or its any string representation. | today      |
-| end                        | `number` or `string`      | Occurrences count or the end date string in ISO format. The number larger than 99999 is not applicable. | `100` |
-| interval                   | `number`      | Repeat by some interval. | `1` |
+| end                        | `number` or `string`      | Number of occurrences or the start date or any string representation of it. The number larger than 99999 will is not applicable (will cause an error). | `100` |
+| interval                   | `number`      | Repeat by a specified interval. | `1` |
 | intervalType               | `'millisecond' / 'minute' / 'hour' / 'day' / 'week' / 'month' / 'year'` | Interval unit name. | `'day'` |
-| numericTimezone            | `number` | A numeric representation of the timezone, according to which dates will be constructed. Take into account that the provided value must in a specific range -12 to 12.  | user's timezone |
-| direction                  | `'forward' / 'backward'` | Whether the dates are repeated to the past or to the future. | `'forward'` |
+| numericTimezone            | `number` | A numeric representation of the timezone, based on which the output will be formatted. Take into account that the provided value must in a specific range -12 to 12.  | user's timezone |
+| direction                  | `'forward' / 'backward'` | Whether dates repeat to the future or the past. | `'forward'` |
 | localeString.lang          | `string`                 | The first argument that receives the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">`Date.toLocaleString`</a> function. | `null` |
 | localeString.formatOptions          | `Intl.DateTimeFormatOptions` | The second argument that receives the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString">`Date.toLocaleString`</a> function. | `null` |
-| exclude                    | `(args: { date: Date, dateStr: string }) => boolean` | Custom filter function.  | `null` |
-| extend                   | `{ [key: string]: (args: {date: Date, dateStr: string}) => unknown }` | The object accepts provided functions under string keys. The function receives an object with `date` and `dateStr` properties in the current iteration. This can help to generate extended properties based on current occurrence. | `null` |
-| onError                    | `(error) => unknown` | A callback which is called when any error occurs. | `null` |
+| exclude                    | `(args: { date: Date, dateStr: string }) => boolean` | Custom filter function. The date will be excluded from the result only if the callback for the corresponding date returns `true`.  | `null` |
+| extend                   | `{ [key: string]: (args: {date: Date, dateStr: string}) => unknown }` | A container consisting of extra keys. The object accepts functions for its keys. The callback receives an object with `date` and `dateStr` properties of the current iteration. This can help to generate extended properties based on current occurrence. | `null` |
+| onError                    | `(error) => unknown` | A callback which is triggered when any error occurs. | `null` |
 
 
 Check out an example.
@@ -92,14 +94,15 @@ The result is an array consisting of objects. The latters always include 'dateSt
 ]
 ```
 
-Check out another example with `direction` set to `'backwards'` and with applied custom `numericTimezone`.
+Check out another example with `direction` set to `'backwards'` and with applied custom `numericTimezone`. The example was compiled in the time zone GMT+4.
 
-`genRecurDateBasedList({
+```sh
+genRecurDateBasedList({
   start: '2023-09-06T16:30:00',
   end: 5,
   interval: 1,
   intervalType: 'day',
-  numericTimezone: 4,
+  numericTimezone: 6,
   direction: 'backward',
   extend: {
     timeStr: ({ dateStr }) => dateStr.split('T')[1]
@@ -108,17 +111,20 @@ Check out another example with `direction` set to `'backwards'` and with applied
     // do some stuff...
     console.log(error.message);
   }
-})`
+})
+```
 
-Check out the result. Take attention to the the `dateStr` format. In case of missing `localeString` property, the date will be formatted to ''
+Check out the result. Pay attention to the the `dateStr` format. In case of missing `localeString` property, the date will be formatted to _yyyy-mm-ddThh:mm:ss_.
 
-`[
+```sh
+[
+  { dateStr: '2023-09-06T18:30:00', timeStr: '18:30:00' },
+  { dateStr: '2023-09-06T17:30:00', timeStr: '17:30:00' },
   { dateStr: '2023-09-06T16:30:00', timeStr: '16:30:00' },
   { dateStr: '2023-09-06T15:30:00', timeStr: '15:30:00' },
-  { dateStr: '2023-09-06T14:30:00', timeStr: '14:30:00' },
-  { dateStr: '2023-09-06T13:30:00', timeStr: '13:30:00' },
-  { dateStr: '2023-09-06T12:30:00', timeStr: '12:30:00' }
-]`
+  { dateStr: '2023-09-06T14:30:00', timeStr: '14:30:00' }
+]
+```
 
 <!-- ROADMAP -->
 ## Roadmap
