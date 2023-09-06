@@ -16,18 +16,21 @@
     "build": "tsdx build"
   },
   "name": "recur-date-based",
-  "author": "NavasardianMichael",
+  "author": "Michael Navasardyan",
   "keywords": [
     "recurrence",
     "events",
     "repeating dates",
-    "multiple times",
-    "props by date",
-    "occurences",
-    "javascript library",
-    "date package"
+    "date generation",
+    "multiple occurrences",
+    "date properties",
+    "date manipulation",
+    "date utility",
+    "date calculations",
+    "past dates",
+    "future dates"
   ],
-  "description": "Generate recurring dates and extended props based on them, according to a certain shape of input data. The result is an array which consists of objects containing the current recurred data in both javascript Date and string formats. Other expanded props based on current iteration date can be generated as well.",
+  "description": "Generate recurring dates and extra props based on them.",
   "module": "dist/recur-date-based.esm.js",
   "devDependencies": {
     "nodemon": "^2.0.16",
