@@ -7,8 +7,9 @@ export function getEndDate({
     interval = DEFAULT_ARGS.interval,
     direction = DEFAULT_ARGS.direction,
     intervalType = DEFAULT_ARGS.intervalType, 
-    end = DEFAULT_ARGS.end
+    end = DEFAULT_ARGS.end,
 }: T_CoreInitialArgs): Date {
+
     if(typeof end === 'string') return new Date(end)
     
     const f_End = new Date(start)

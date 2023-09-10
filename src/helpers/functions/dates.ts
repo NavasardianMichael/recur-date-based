@@ -12,6 +12,7 @@ export const setTimezoneOffset = (date: Date, offset: number | undefined) => {
 
 export const isValidDate = (date: T_CoreInitialArgs['start']) => {
     const processedDate = new Date(date)
+    
     if (Object.prototype.toString.call(processedDate) === "[object Date]") {
         return !!processedDate.getTime()
     }

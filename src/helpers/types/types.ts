@@ -1,6 +1,6 @@
 export type T_ArgsBase = {
-    start: string | Date,
-    end: number | string
+    start: string | Date
+    end: number | string | Date
     interval: number
     intervalType: keyof typeof E_IntervalTypes
     numericTimezone: number 
@@ -8,8 +8,8 @@ export type T_ArgsBase = {
     localeString: {
         lang: string
         formatOptions: Intl.DateTimeFormatOptions
-    },
-    exclude: (args: Pick<T_CoreReturnType, 'date' | 'dateStr'>) => boolean,
+    }
+    exclude: (args: Pick<T_CoreReturnType, 'date' | 'dateStr'>) => boolean
     extend: {
         [key: string]: (args: Pick<T_CallbackArgs, 'date' | 'dateStr'>) => unknown
     }
@@ -28,8 +28,8 @@ export type T_Error = {
 }
 
 export type T_CoreArgs = {
-    start: Date,
-    end: Date,
+    start: Date
+    end: Date
     interval: T_ArgsBase['interval']
     direction: T_ArgsBase['direction']
     intervalType: T_ArgsBase['intervalType']
