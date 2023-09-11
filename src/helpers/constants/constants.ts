@@ -90,9 +90,10 @@ export const VALIDATORS: {
         const message = (
             `${generateErrorPreText('end', end)}. The provided value number must be either a string, which can be formatted into a valid date, or a number less than 100_000.`
         )
+        
         if(
             (typeof end !== 'string' && typeof end !== 'number' && !isValidDate(end)) ||
-            (typeof end === 'string' && typeof !isValidDate(end)) ||
+            (typeof end === 'string' && !isValidDate(end)) ||
             (typeof end === 'number' && (end > 99_999 || isNaN(end)))
         ) return message
 
