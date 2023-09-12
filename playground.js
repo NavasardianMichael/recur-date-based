@@ -1,6 +1,6 @@
 const package = require('./dist')
 const list = package.genRecurDateBasedList({
-  start: new Date('2023-09-06T16:30:00'),
+  start: new Date(),
   interval: 3,
   intervalType: 'hour',
   numericTimezone: 0,

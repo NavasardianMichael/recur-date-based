@@ -49,7 +49,7 @@ export const VALIDATORS: {
     start: ({ start }) => {
         if(isNullish(start)) return '';
 
-        if(typeof start !== 'string' && !isValidDate(start)) {
+        if(typeof start === 'number' || (typeof start !== 'string' && !isValidDate(start))) {
             return (
                 `${generateErrorPreText('start', start)}. The provided value must be either a string, which can be formatted into a valid date, or a Date object.`
             )
