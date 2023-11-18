@@ -14,9 +14,12 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
         
         const isDirectionForward = f_Args.direction === E_Direction.forward
         let iterations: number = 0 
-        const postponeByDirection = POSTPONERS[f_Args.direction]
+
         const postpone = (date: T_PostponeArgs['start']) => {
-            postponeByDirection[f_Args.intervalType](date, f_Args.interval);
+            f_Args.rules.forEach(rule => {
+                const postponeByDirection = POSTPONERS[f_Args.direction]
+                postponeByDirection[rule.type](date, rule.portion);
+            })
         }
 
         while(
@@ -25,7 +28,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
             f_Args.start > f_Args.end
         ) {
             iterations++
-
+            
             if(iterations === ERRORS.outputLimit.count) {
                 throw new Error(ERRORS.outputLimit.errorText)
             }
@@ -50,6 +53,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
                 postpone(f_Args.start)
                 if(typeof f_Args.end === 'number') postpone(f_Args.end)
                 iterations++
+            
                 continue
             }
 

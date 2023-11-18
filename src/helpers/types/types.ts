@@ -1,8 +1,7 @@
 export type T_ArgsBase = {
     start: string | Date
     end: number | string | Date
-    interval: number
-    intervalType: keyof typeof E_IntervalTypes
+    rules: T_Rules
     numericTimezone: number 
     direction: keyof typeof E_Direction
     localeString: {
@@ -30,9 +29,8 @@ export type T_Error = {
 export type T_CoreArgs = {
     start: Date
     end: Date
-    interval: T_ArgsBase['interval']
+    rules: T_ArgsBase['rules']
     direction: T_ArgsBase['direction']
-    intervalType: T_ArgsBase['intervalType']
     localeString: T_ArgsBase['localeString']
     extend?: T_ArgsBase['extend']
     exclude?: T_ArgsBase['exclude']
@@ -55,9 +53,20 @@ export enum E_IntervalTypes {
     year = 'year'
 }
 
+export type T_Rules = T_Rule[]
+
+export type T_Rule = {
+    type: E_IntervalTypes
+    portion: number
+}
+
 export enum E_Direction {
     backward = 'backward', 
     forward = 'forward'
 }
 
-export type T_PostponeArgs = Pick<T_CoreArgs, 'start' | 'interval' | 'intervalType'>
+export type T_PostponeArgs = Pick<T_CoreArgs, 'start' | 'rules'>
+
+export type PartialRecord<K extends keyof any, T> = {
+  [P in K]?: T;
+};

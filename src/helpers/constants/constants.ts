@@ -1,7 +1,7 @@
 import { isNullish } from "../functions/commons";
 import { isValidDate } from "../functions/dates";
 import { generateErrorPreText } from "../functions/lib";
-import { E_Direction, E_IntervalTypes, T_ArgsBase, T_CoreArgs, T_CoreInitialArgs } from "../types/types"
+import { E_Direction, E_IntervalTypes, T_ArgsBase, T_CoreArgs, T_CoreInitialArgs, T_Rule } from "../types/types"
 
 export const ERRORS = {
     outputLimit: {
@@ -13,14 +13,16 @@ export const ERRORS = {
 export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimezone' | 'exclude' | 'onError' | 'localeString'> = {
     start: new Date(),
     end: 100,
-    interval: 1,
+    rules: [{
+        portion: 1,
+        type: E_IntervalTypes.day
+    }],
     direction: E_Direction.forward,
-    intervalType: E_IntervalTypes.day,
 }
 
 export const POSTPONERS: {
     [key in T_CoreArgs['direction']]: {
-        [key in E_IntervalTypes]: (start: T_CoreArgs['start'], interval: T_CoreArgs['interval']) => void
+        [key in E_IntervalTypes]: (start: T_CoreArgs['start'], interval: T_Rule['portion']) => void
     }
 } = {
     backward: {
@@ -57,30 +59,31 @@ export const VALIDATORS: {
 
         return ''
     },
-    interval: ({ interval }) => {
-        if(isNullish(interval)) return '';
+    rules: ({ rules }) => {
+        if(isNullish(rules)) return '';
 
-        if(
-            (typeof interval !== 'number') || 
-            isNaN(interval) || 
-            !Number.isInteger(interval) || 
-            interval <= 0
-        ) {
-            return (
-                `${generateErrorPreText('interval', interval)}. The provided value must be a positive integer. Do not use negative values. Instead, you can set direction property to "backward".`
-            )
-        }
+        rules.forEach(({ type, portion }) => {
+            if(
+                (typeof portion !== 'number') || 
+                isNaN(portion) || 
+                !Number.isInteger(portion) || 
+                portion <= 0
+            ) {
+                return (
+                    `${generateErrorPreText('rules', portion)}. The provided value must be a positive integer. Do not use negative values. Instead, you can set direction property to "backward".`
+                )
+            }
+    
+            if(isNullish(type)) return '';
 
-        return ''
-    },
-    intervalType: ({ intervalType }) => {
-        if(isNullish(intervalType)) return '';
-
-        if(!Object.keys(E_IntervalTypes).includes(intervalType)) {
-            return (
-                `${generateErrorPreText('intervalType', intervalType)}. The provided value must be one of the members from the following list: ${JSON.stringify(Object.keys(E_IntervalTypes))}.`
-            )
-        }
+            if(!Object.keys(E_IntervalTypes).includes(type)) {
+                return (
+                    `${generateErrorPreText('rules', type)}. The provided value must be one of the members from the following list: ${JSON.stringify(Object.keys(E_IntervalTypes))}.`
+                )
+            }
+    
+            return ''
+        })
 
         return ''
     },
