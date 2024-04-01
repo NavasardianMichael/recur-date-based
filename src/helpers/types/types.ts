@@ -22,7 +22,7 @@ export type T_CallbackArgs = {
     dateStr: T_ArgsBase['start'];
 }
 
-export type T_Error = {
+export interface T_Error extends Error {
     message: string
 }
 
@@ -32,11 +32,13 @@ export type T_CoreArgs = {
     rules: T_ArgsBase['rules']
     direction: T_ArgsBase['direction']
     localeString: T_ArgsBase['localeString']
+    numericTimezone: T_ArgsBase['numericTimezone']
     extend?: T_ArgsBase['extend']
     exclude?: T_ArgsBase['exclude']
 }
 
 export type T_CoreReturnType = {
+    date: Date
     dateStr: string
     [key: string]: unknown
 }
@@ -56,7 +58,7 @@ export enum E_IntervalTypes {
 export type T_Rules = T_Rule[]
 
 export type T_Rule = {
-    type: E_IntervalTypes
+    unit: E_IntervalTypes
     portion: number
 }
 

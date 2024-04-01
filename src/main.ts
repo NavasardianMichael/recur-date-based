@@ -18,7 +18,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
         const postpone = (date: T_PostponeArgs['start']) => {
             f_Args.rules.forEach(rule => {
                 const postponeByDirection = POSTPONERS[f_Args.direction]
-                postponeByDirection[rule.type](date, rule.portion);
+                postponeByDirection[rule.unit](date, rule.portion);
             })
         }
 
@@ -33,18 +33,17 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
                 throw new Error(ERRORS.outputLimit.errorText)
             }
 
+            const dateStr = (
+                f_Args.localeString ?
+                f_Args.start.toLocaleString(f_Args.localeString?.lang, f_Args.localeString?.formatOptions) :
+                toAdjustedTimezoneISOString(f_Args.start)
+            )
             const currentResult: T_CoreReturnType = {
-                dateStr: (
-                    f_Args.localeString ?
-                    f_Args.start.toLocaleString(f_Args.localeString?.lang, f_Args.localeString?.formatOptions) :
-                    toAdjustedTimezoneISOString(f_Args.start)
-                )
+                dateStr,
+                date: new Date(dateStr+'Z'),
             }
 
-            const callbackArgs = {
-                date: f_Args.start,
-                dateStr: currentResult.dateStr
-            }
+            const callbackArgs = structuredClone(currentResult)
 
             if(
                 f_Args.exclude &&

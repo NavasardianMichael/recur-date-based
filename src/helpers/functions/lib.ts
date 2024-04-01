@@ -13,7 +13,7 @@ export function getEndDate({
     
     const f_End = new Date(start)
     rules.forEach(rule => {
-        POSTPONERS[direction][rule.type](f_End, rule.portion * (+end ?? +DEFAULT_ARGS.end))
+        POSTPONERS[direction][rule.unit](f_End, rule.portion * (+end ?? +DEFAULT_ARGS.end))
     })
 
     return f_End
@@ -27,7 +27,8 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
         end: setTimezoneOffset(getEndDate(args ?? DEFAULT_ARGS), args.numericTimezone),
         localeString: args.localeString,
         extend: args.extend,
-        exclude: args.exclude
+        exclude: args.exclude,
+        numericTimezone: args.numericTimezone
     }
 }
 

@@ -6,16 +6,16 @@ import { E_Direction, E_IntervalTypes, T_ArgsBase, T_CoreArgs, T_CoreInitialArgs
 export const ERRORS = {
     outputLimit: {
         count: 99_999,
-        errorText: 'Too many iterations! It has exceeded 99_999'
+        errorText: 'Too many iterations! It has exceeded 99_999.'
     }
 }
 
 export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimezone' | 'exclude' | 'onError' | 'localeString'> = {
     start: new Date(),
-    end: 100,
+    end: 10,
     rules: [{
         portion: 1,
-        type: E_IntervalTypes.day
+        unit: E_IntervalTypes.day
     }],
     direction: E_Direction.forward,
 }
@@ -59,31 +59,38 @@ export const VALIDATORS: {
 
         return ''
     },
-    rules: ({ rules }) => {
+    rules: ({ rules, direction }) => {
         if(isNullish(rules)) return '';
 
-        rules.forEach(({ type, portion }) => {
+        for(const { unit, portion } of rules) {
             if(
                 (typeof portion !== 'number') || 
                 isNaN(portion) || 
-                !Number.isInteger(portion) || 
-                portion <= 0
+                !Number.isInteger(portion)
             ) {
                 return (
-                    `${generateErrorPreText('rules', portion)}. The provided value must be a positive integer. Do not use negative values. Instead, you can set direction property to "backward".`
+                    `${generateErrorPreText('rules', portion)}. The provided value for "${unit}" must be a number.`
                 )
             }
-    
-            if(isNullish(type)) return '';
 
-            if(!Object.keys(E_IntervalTypes).includes(type)) {
+            if(portion <= 0) {
+                console.log({direction});
+                
                 return (
-                    `${generateErrorPreText('rules', type)}. The provided value must be one of the members from the following list: ${JSON.stringify(Object.keys(E_IntervalTypes))}.`
+                    direction === E_Direction.forward ?
+                    `${generateErrorPreText('rules', portion)}. The provided value for "${unit}" (and for all the portions as well) must be a positive number. Use only positive portions. Instead, you can set direction property to "backward" in "genRecurDateBasedList" configs.` :
+                    `${generateErrorPreText('rules', portion)}. The provided value for "${unit}" (and for all the portions as well) must be a positive number. Use only positive portions. The property "direction" is already set to "backward" in "genRecurDateBasedList" configs.`
                 )
             }
     
-            return ''
-        })
+            if(isNullish(unit)) return '';
+
+            if(!Object.keys(E_IntervalTypes).includes(unit)) {
+                return (
+                    `${generateErrorPreText('rules', unit)}. The provided "unit" must be one of the types from the following list: ${Object.keys(E_IntervalTypes).join(', ')}.`
+                )
+            }
+        }
 
         return ''
     },

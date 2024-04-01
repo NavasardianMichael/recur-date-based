@@ -3,28 +3,19 @@ const list = package.genRecurDateBasedList({
   start: new Date(),
   rules: [
     {
-      type: 'month',
+      unit: 'month',
       portion: 1
     },
     {
-      type: 'day',
+      unit: 'day',
       portion: 3
     },
-    {
-      type: 'hour',
-      portion: 5
-    },
   ],
-  numericTimezone: 0,
-  // direction: 'backward',
-  end: '2024-11-24T16:30:00',
-  // exclude: ({ date }) => date > new Date(),
+  direction: 'backward',
+  numericTimezone: 7,
   extend: {
     timeStr: ({ dateStr }) => dateStr.split('T')[1]
   },
-  onError: (error) => {
-    // do some stuff...
-    console.log(error.message);
-  }
+
 })
 console.log(list);

@@ -1,9 +1,7 @@
 import { T_CoreInitialArgs } from "../types/types"
 import { pad } from "./commons"
 
-export const setTimezoneOffset = (date: Date, offset: number | undefined) => {
-    if(offset == null) return date
-
+export const setTimezoneOffset = (date: Date, offset: number) => {
     date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000))
     date.setTime(date.getTime() + (offset * 60 * 60 * 1000))
     
