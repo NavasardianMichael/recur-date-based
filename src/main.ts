@@ -1,4 +1,5 @@
 import { DEFAULT_ARGS, ERRORS, POSTPONERS } from "./helpers/constants/constants"
+import { cloneDate } from './helpers/functions/commons'
 import { toAdjustedTimezoneISOString } from "./helpers/functions/dates"
 import { checkInvalidData, processInitialArgs } from "./helpers/functions/lib"
 import { E_Direction, T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from "./helpers/types/types"
@@ -41,6 +42,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
             const currentResult: T_CoreReturnType = {
                 dateStr,
                 date: new Date(dateStr+'Z'),
+                utcDate: new Date(cloneDate(f_Args.start).getTime() + cloneDate(f_Args.start).getTimezoneOffset() * 60000)
             }
 
             const callbackArgs = structuredClone(currentResult)

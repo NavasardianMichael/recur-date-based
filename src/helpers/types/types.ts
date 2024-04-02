@@ -39,6 +39,7 @@ export type T_CoreArgs = {
 
 export type T_CoreReturnType = {
     date: Date
+    utcDate: Date
     dateStr: string
     [key: string]: unknown
 }

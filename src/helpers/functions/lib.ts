@@ -8,6 +8,7 @@ export function getEndDate({
     direction = DEFAULT_ARGS.direction,
     end = DEFAULT_ARGS.end,
 }: T_CoreInitialArgs): Date {
+console.log({end, rules});
 
     if(typeof end === 'string') return new Date(end)
     
@@ -20,9 +21,11 @@ export function getEndDate({
 }
 
 export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {   
+    if(!args.rules?.length) args.rules = DEFAULT_ARGS.rules
+
     return {
         start: setTimezoneOffset(new Date(args.start ?? DEFAULT_ARGS.start), args.numericTimezone),
-        rules: args.rules ?? DEFAULT_ARGS.rules,
+        rules: args.rules,
         direction: args.direction ?? DEFAULT_ARGS.direction,
         end: setTimezoneOffset(getEndDate(args ?? DEFAULT_ARGS), args.numericTimezone),
         localeString: args.localeString,

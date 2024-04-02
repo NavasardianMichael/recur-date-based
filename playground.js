@@ -2,19 +2,16 @@ const package = require('./dist')
 const list = package.genRecurDateBasedList({
   start: new Date(),
   rules: [
-    {
-      unit: 'month',
-      portion: 1
-    },
-    {
-      unit: 'day',
-      portion: 3
-    },
+
   ],
-  direction: 'backward',
-  numericTimezone: 7,
+  // direction: 'backward',
+  numericTimezone: 3,
   extend: {
-    timeStr: ({ dateStr }) => dateStr.split('T')[1]
+    timeStr: ({ dateStr, date }) => {
+      console.log({date, d: new Date(date)});
+      return dateStr.split('T')[1]
+    },
+    isMonday: ({date, dateStr}) => date.getDay() === 1,
   },
 
 })
