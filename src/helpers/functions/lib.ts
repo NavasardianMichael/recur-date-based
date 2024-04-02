@@ -1,4 +1,6 @@
-import { DEFAULT_ARGS, POSTPONERS, VALIDATORS } from "../constants/constants"
+import { DEFAULT_ARGS } from "../constants/commons"
+import { POSTPONERS } from '../constants/postponers'
+import { VALIDATORS } from '../constants/validators'
 import { T_ArgsBase, T_CoreArgs, T_CoreInitialArgs } from "../types/types"
 import { setTimezoneOffset } from "./dates"
 
@@ -8,7 +10,6 @@ export function getEndDate({
     direction = DEFAULT_ARGS.direction,
     end = DEFAULT_ARGS.end,
 }: T_CoreInitialArgs): Date {
-console.log({end, rules});
 
     if(typeof end === 'string') return new Date(end)
     
@@ -22,12 +23,14 @@ console.log({end, rules});
 
 export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {   
     if(!args.rules?.length) args.rules = DEFAULT_ARGS.rules
+    const start = new Date(args.start ?? DEFAULT_ARGS.start)
+    const end = getEndDate(args ?? DEFAULT_ARGS)
 
     return {
-        start: setTimezoneOffset(new Date(args.start ?? DEFAULT_ARGS.start), args.numericTimezone),
+        start: args.numericTimezone ? setTimezoneOffset(start, args.numericTimezone) : start,
         rules: args.rules,
         direction: args.direction ?? DEFAULT_ARGS.direction,
-        end: setTimezoneOffset(getEndDate(args ?? DEFAULT_ARGS), args.numericTimezone),
+        end: args.numericTimezone ? setTimezoneOffset(end, args.numericTimezone) : end,
         localeString: args.localeString,
         extend: args.extend,
         exclude: args.exclude,

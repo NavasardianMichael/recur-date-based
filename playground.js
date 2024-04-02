@@ -4,11 +4,14 @@ const list = package.genRecurDateBasedList({
   rules: [
 
   ],
-  // direction: 'backward',
-  numericTimezone: 3,
+  direction: 'backward',
+  localeString: {
+    // lang: 'ko-KR',
+    formatOptions: { timeZone: "America/New_York" }
+  },
+  // numericTimezone: 4,
   extend: {
-    timeStr: ({ dateStr, date }) => {
-      console.log({date, d: new Date(date)});
+    timeStr: ({ dateStr, date, utcDate }) => {
       return dateStr.split('T')[1]
     },
     isMonday: ({date, dateStr}) => date.getDay() === 1,

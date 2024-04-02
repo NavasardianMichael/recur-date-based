@@ -1,6 +1,7 @@
-import { DEFAULT_ARGS, ERRORS, POSTPONERS } from "./helpers/constants/constants"
+import { DEFAULT_ARGS, ERRORS, TODAY } from "./helpers/constants/commons"
+import { POSTPONERS } from './helpers/constants/postponers'
 import { cloneDate } from './helpers/functions/commons'
-import { toAdjustedTimezoneISOString } from "./helpers/functions/dates"
+import { setTimezoneOffset, toAdjustedTimezoneISOString } from "./helpers/functions/dates"
 import { checkInvalidData, processInitialArgs } from "./helpers/functions/lib"
 import { E_Direction, T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from "./helpers/types/types"
 
@@ -12,6 +13,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
         checkInvalidData(args)
         
         const f_Args = processInitialArgs(args)
+        console.log({f_Args});
         
         const isDirectionForward = f_Args.direction === E_Direction.forward
         let iterations: number = 0 
@@ -36,13 +38,19 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
 
             const dateStr = (
                 f_Args.localeString ?
-                f_Args.start.toLocaleString(f_Args.localeString?.lang, f_Args.localeString?.formatOptions) :
+                f_Args.start.toLocaleString(f_Args.localeString.lang, f_Args.localeString.formatOptions) :
                 toAdjustedTimezoneISOString(f_Args.start)
             )
+            
+            const currentStart = cloneDate(f_Args.start)
             const currentResult: T_CoreReturnType = {
                 dateStr,
-                date: new Date(dateStr+'Z'),
-                utcDate: new Date(cloneDate(f_Args.start).getTime() + cloneDate(f_Args.start).getTimezoneOffset() * 60000)
+                date: (
+                    f_Args.localeString?.formatOptions?.timeZone ? 
+                    currentStart :
+                    setTimezoneOffset(currentStart, TODAY.getTimezoneOffset() / -60, false)
+                ),
+                utcDate: setTimezoneOffset(cloneDate(currentStart), -f_Args.numericTimezone || TODAY.getTimezoneOffset() / 60, false)
             }
 
             const callbackArgs = structuredClone(currentResult)

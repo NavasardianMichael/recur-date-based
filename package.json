@@ -35,9 +35,9 @@
   "description": "Generate recurring dates and extra props based on them.",
   "module": "dist/recur-date-based.esm.js",
   "devDependencies": {
-    "nodemon": "^2.0.16",
+    "nodemon": "^2.0.22",
     "tsdx": "^0.14.1",
-    "tslib": "^2.4.0",
-    "typescript": "^4.6.4"
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.3"
   }
 }

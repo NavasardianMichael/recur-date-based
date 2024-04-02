@@ -1,3 +1,5 @@
+import { TODAY } from '../constants/commons'
+
 export type T_ArgsBase = {
     start: string | Date
     end: number | string | Date
@@ -5,13 +7,11 @@ export type T_ArgsBase = {
     numericTimezone: number 
     direction: keyof typeof E_Direction
     localeString: {
-        lang: string
+        lang: Parameters<typeof TODAY.toLocaleString>[0]
         formatOptions: Intl.DateTimeFormatOptions
     }
     exclude: (args: Pick<T_CoreReturnType, 'date' | 'dateStr'>) => boolean
-    extend: {
-        [key: string]: (args: Pick<T_CallbackArgs, 'date' | 'dateStr'>) => unknown
-    }
+    extend: Record<string, (args: Pick<T_CallbackArgs, 'date' | 'dateStr'>) => unknown>
     onError: (error: T_Error) => unknown
 }
 
@@ -39,7 +39,6 @@ export type T_CoreArgs = {
 
 export type T_CoreReturnType = {
     date: Date
-    utcDate: Date
     dateStr: string
     [key: string]: unknown
 }
@@ -69,7 +68,3 @@ export enum E_Direction {
 }
 
 export type T_PostponeArgs = Pick<T_CoreArgs, 'start' | 'rules'>
-
-export type PartialRecord<K extends keyof any, T> = {
-  [P in K]?: T;
-};
