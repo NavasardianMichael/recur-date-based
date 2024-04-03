@@ -2,7 +2,7 @@ import { DEFAULT_ARGS } from "../constants/commons"
 import { POSTPONERS } from '../constants/postponers'
 import { VALIDATORS } from '../constants/validators'
 import { T_ArgsBase, T_CoreArgs, T_CoreInitialArgs } from "../types/types"
-import { setTimezoneOffset } from "./dates"
+import { setTimeZoneOffset } from "./dates"
 
 export function getEndDate({ 
     start = DEFAULT_ARGS.start, 
@@ -27,14 +27,14 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
     const end = getEndDate(args ?? DEFAULT_ARGS)
 
     return {
-        start: args.numericTimezone ? setTimezoneOffset(start, args.numericTimezone) : start,
+        start: args.numericTimeZone ? setTimeZoneOffset(start, args.numericTimeZone) : start,
         rules: args.rules,
         direction: args.direction ?? DEFAULT_ARGS.direction,
-        end: args.numericTimezone ? setTimezoneOffset(end, args.numericTimezone) : end,
+        end: args.numericTimeZone ? setTimeZoneOffset(end, args.numericTimeZone) : end,
         localeString: args.localeString,
         extend: args.extend,
         exclude: args.exclude,
-        numericTimezone: args.numericTimezone
+        numericTimeZone: args.numericTimeZone
     }
 }
 

@@ -7,9 +7,9 @@ export const ERRORS = {
     }
 }
 
-export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimezone' | 'exclude' | 'onError' | 'localeString'> = {
+export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimeZone' | 'exclude' | 'onError' | 'localeString'> = {
     start: new Date(),
-    end: 2,
+    end: 10,
     rules: [{
         portion: 1,
         unit: E_IntervalTypes.day

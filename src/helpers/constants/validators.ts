@@ -78,28 +78,32 @@ export const VALIDATORS: {
 
         return ''
     },
-    numericTimezone: ({ numericTimezone }) => {
-        if(isNullish(numericTimezone)) return '';
+    numericTimeZone: ({ numericTimeZone }) => {
+        if(isNullish(numericTimeZone)) return '';
 
         if(
-            (typeof numericTimezone !== 'number') || 
-            isNaN(numericTimezone) || 
-            !Number.isInteger(numericTimezone) || 
-            numericTimezone < -12 || 
-            numericTimezone > 12
+            (typeof numericTimeZone !== 'number') || 
+            isNaN(numericTimeZone) || 
+            !Number.isInteger(numericTimeZone) || 
+            numericTimeZone < -12 || 
+            numericTimeZone > 12
         ) {
             return (
-                `${generateErrorPreText('numericTimezone', numericTimezone)}. The provided value timezone must be an integer defined in a specific range (from -12 to 12).`
+                `${generateErrorPreText('numericTimeZone', numericTimeZone)}. The provided value timezone must be an integer defined in a specific range (from -12 to 12).`
             )
         }
 
         return ''
     },
-    localeString: ({ localeString }) => {
+    localeString: ({ localeString, numericTimeZone }) => {
         if(isNullish(localeString)) return '';
 
         if(typeof localeString !== 'object') {
             return `The provided property "localeString" must be an object.`
+        }
+
+        if(numericTimeZone != null && localeString.formatOptions?.timeZone != null) {
+            return `There is an unresolved conflict in the provided configuration object. Either provide "timeZone" property in "localeString.formatOptions" or define the timezone using the property "numericTimeZone".`
         }
 
         return ''

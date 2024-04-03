@@ -1,7 +1,7 @@
 import { DEFAULT_ARGS, ERRORS, TODAY } from "./helpers/constants/commons"
 import { POSTPONERS } from './helpers/constants/postponers'
 import { cloneDate } from './helpers/functions/commons'
-import { setTimezoneOffset, toAdjustedTimezoneISOString } from "./helpers/functions/dates"
+import { setTimeZoneOffset, toAdjustedTimezoneISOString } from "./helpers/functions/dates"
 import { checkInvalidData, processInitialArgs } from "./helpers/functions/lib"
 import { E_Direction, T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from "./helpers/types/types"
 
@@ -42,20 +42,25 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
                 toAdjustedTimezoneISOString(f_Args.start)
             )
             
-            const currentStart = cloneDate(f_Args.start)
-            const startDateClone = cloneDate(currentStart)
+            const currentStartDate = cloneDate(f_Args.start)
 
             const currentResult: T_CoreReturnType = {
                 dateStr,
                 date: (
+                    setTimeZoneOffset(
+                        (
+                            f_Args.localeString?.formatOptions?.timeZone ?
+                            new Date(Date.parse(dateStr)) :
+                            currentStartDate
+                        ), 
+                        TODAY.getTimezoneOffset() / -60,
+                        false
+                    )
+                ),
+                utcDate: (
                     f_Args.localeString?.formatOptions?.timeZone ? 
-                    currentStart :
-                    setTimezoneOffset(currentStart, TODAY.getTimezoneOffset() / -60, false)
-                    ),
-                    utcDate: (
-                    f_Args.localeString?.formatOptions?.timeZone ? 
-                    startDateClone :
-                    setTimezoneOffset(startDateClone, -f_Args.numericTimezone || TODAY.getTimezoneOffset() / 60, false)
+                    cloneDate(currentStartDate) : 
+                    setTimeZoneOffset(cloneDate(currentStartDate), -f_Args.numericTimeZone || TODAY.getTimezoneOffset() / 60, false)
                 )
             }
 

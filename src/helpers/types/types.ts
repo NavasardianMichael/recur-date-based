@@ -4,7 +4,7 @@ export type T_ArgsBase = {
     start: string | Date
     end: number | string | Date
     rules: T_Rules
-    numericTimezone: number 
+    numericTimeZone: number 
     direction: keyof typeof E_Direction
     localeString: {
         lang: Parameters<typeof TODAY.toLocaleString>[0]
@@ -32,7 +32,7 @@ export type T_CoreArgs = {
     rules: T_ArgsBase['rules']
     direction: T_ArgsBase['direction']
     localeString: T_ArgsBase['localeString']
-    numericTimezone: T_ArgsBase['numericTimezone']
+    numericTimeZone: T_ArgsBase['numericTimeZone']
     extend?: T_ArgsBase['extend']
     exclude?: T_ArgsBase['exclude']
 }
