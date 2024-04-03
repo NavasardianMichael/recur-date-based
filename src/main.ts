@@ -63,7 +63,11 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
                 )
             }
 
-            const callbackArgs = structuredClone(currentResult)
+            const callbackArgs: T_CoreReturnType = {
+                ...currentResult,
+                date: cloneDate(currentResult.date),
+                utcDate: cloneDate(currentResult.utcDate),
+            }
 
             if(
                 f_Args.exclude &&
