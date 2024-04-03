@@ -9,7 +9,7 @@ const list = package.genRecurDateBasedList({
     // lang: 'ko-KR',
     formatOptions: { timeZone: "America/New_York" }
   },
-  // numericTimezone: 4,
+  // numericTimezone: 1,
   extend: {
     timeStr: ({ dateStr, date, utcDate }) => {
       return dateStr.split('T')[1]

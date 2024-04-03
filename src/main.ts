@@ -43,14 +43,20 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
             )
             
             const currentStart = cloneDate(f_Args.start)
+            const startDateClone = cloneDate(currentStart)
+
             const currentResult: T_CoreReturnType = {
                 dateStr,
                 date: (
                     f_Args.localeString?.formatOptions?.timeZone ? 
                     currentStart :
                     setTimezoneOffset(currentStart, TODAY.getTimezoneOffset() / -60, false)
-                ),
-                utcDate: setTimezoneOffset(cloneDate(currentStart), -f_Args.numericTimezone || TODAY.getTimezoneOffset() / 60, false)
+                    ),
+                    utcDate: (
+                    f_Args.localeString?.formatOptions?.timeZone ? 
+                    startDateClone :
+                    setTimezoneOffset(startDateClone, -f_Args.numericTimezone || TODAY.getTimezoneOffset() / 60, false)
+                )
             }
 
             const callbackArgs = structuredClone(currentResult)
