@@ -32,8 +32,6 @@ export const VALIDATORS: {
             }
 
             if(portion <= 0) {
-                console.log({direction});
-                
                 return (
                     direction === E_Direction.forward ?
                     `${generateErrorPreText('rules', portion)}. The provided value for "${unit}" (and for all the portions as well) must be a positive number. Use only positive portions. Instead, you can set direction property to "backward" in "genRecurDateBasedList" configs.` :

@@ -6,11 +6,11 @@ const list = package.genRecurDateBasedList({
 
   ],
   // direction: 'backward',
-  localeString: {
-    // lang: 'ko-KR',
-    formatOptions: { timeZone: "UTC" }
-  },
-  // numericTimeZone: 3,
+  // localeString: {
+  //   lang: 'en-US',
+  //   formatOptions: { timeZone: "UTC" }
+  // },
+  numericTimeZone: 3,
   extend: {
     timeStr: ({ dateStr, date, utcDate }) => {
       return dateStr.split('T')[1]

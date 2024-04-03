@@ -13,7 +13,6 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
         checkInvalidData(args)
         
         const f_Args = processInitialArgs(args)
-        console.log({f_Args});
         
         const isDirectionForward = f_Args.direction === E_Direction.forward
         let iterations: number = 0 
