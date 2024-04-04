@@ -2,7 +2,7 @@ import { DEFAULT_ARGS } from "../constants/commons"
 import { POSTPONERS } from '../constants/postponers'
 import { VALIDATORS } from '../constants/validators'
 import { T_ArgsBase, T_CoreArgs, T_CoreInitialArgs } from "../types/types"
-import { setTimeZoneOffset } from "./dates"
+import { isDateObject, setTimeZoneOffset } from "./dates"
 
 export function getEndDate({ 
     start = DEFAULT_ARGS.start, 
@@ -12,8 +12,11 @@ export function getEndDate({
 }: T_CoreInitialArgs): Date {
 
     if(typeof end === 'string') return new Date(end)
+
+    if(isDateObject(end)) return end as Date
     
     const f_End = new Date(start)
+    
     rules.forEach(rule => {
         POSTPONERS[direction][rule.unit](f_End, rule.portion * (+end ?? +DEFAULT_ARGS.end))
     })

@@ -7,7 +7,7 @@ export const VALIDATORS: {
     [key in keyof T_ArgsBase]: (args: T_CoreInitialArgs) => string
 } = {
     start: ({ start }) => {
-        if(isNullish(start) && isValidDate(start)) return '';
+        if(isNullish(start) || isValidDate(start)) return '';
 
         return (
             `${generateErrorPreText('start', start)}. The provided value must be either a string, which can be formatted into a valid date, or a Date.`
