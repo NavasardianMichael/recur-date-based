@@ -7,7 +7,7 @@ export type T_ArgsBase = {
     numericTimeZone: number 
     direction: keyof typeof E_Direction
     localeString: T_LocaleString
-    exclude: (args: T_CallbackArgs) => boolean
+    filter: (args: T_CallbackArgs) => boolean
     extend: Record<string, (args: T_CallbackArgs) => unknown>
     onError: (error: T_Error) => unknown
 }
@@ -40,7 +40,7 @@ export type T_CoreArgs = {
     localeString: T_ArgsBase['localeString']
     numericTimeZone: T_ArgsBase['numericTimeZone']
     extend?: T_ArgsBase['extend']
-    exclude?: T_ArgsBase['exclude']
+    filter?: T_ArgsBase['filter']
 }
 
 export type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]

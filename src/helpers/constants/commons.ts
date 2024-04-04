@@ -7,7 +7,7 @@ export const ERRORS = {
     }
 }
 
-export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimeZone' | 'exclude' | 'onError' | 'localeString'> = {
+export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimeZone' | 'filter' | 'onError' | 'localeString'> = {
     start: new Date(),
     end: 10,
     rules: [{

@@ -102,11 +102,11 @@ export const VALIDATORS: {
 
         return ''
     },
-    exclude: ({ exclude }) => {
-        if(isNullish(exclude)) return '';
+    filter: ({ filter }) => {
+        if(isNullish(filter)) return '';
 
-        if(typeof exclude !== 'function') {
-            return `The provided property "exclude" must be a function, which returns a boolean value.`
+        if(typeof filter !== 'function') {
+            return `The provided property "filter" must be a function, which returns a boolean value.`
         }
 
         return ''

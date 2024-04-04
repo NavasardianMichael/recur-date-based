@@ -1,10 +1,11 @@
 const package = require('./dist')
 const list = package.genRecurDateBasedList({
-  start: '2024-04-01T16:30:00',
+  start: '2023-04-01T16:30:00',
   end: new Date(),
   rules: [
 
   ],
+  filter: ({ date }) => date.getFullYear() === 2023 && date.getDate() === 9
   // direction: 'backward',
   // localeString: {
   //   lang: 'en-US',

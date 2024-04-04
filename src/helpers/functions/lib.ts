@@ -36,7 +36,7 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
         end: args.numericTimeZone ? setTimeZoneOffset(end, args.numericTimeZone) : end,
         localeString: args.localeString,
         extend: args.extend,
-        exclude: args.exclude,
+        filter: args.filter,
         numericTimeZone: args.numericTimeZone
     }
 }

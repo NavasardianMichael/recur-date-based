@@ -70,8 +70,8 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
             }
 
             if(
-                f_Args.exclude &&
-                f_Args.exclude(callbackArgs) === true
+                f_Args.filter &&
+                f_Args.filter(callbackArgs) === false
             ) {
                 postpone(f_Args.start)
                 if(typeof f_Args.end === 'number') postpone(f_Args.end)
