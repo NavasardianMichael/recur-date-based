@@ -10,17 +10,21 @@ export type T_ArgsBase = {
         lang: Parameters<typeof TODAY.toLocaleString>[0]
         formatOptions: Intl.DateTimeFormatOptions
     }
-    exclude: (args: Pick<T_CoreReturnType, 'date' | 'dateStr'>) => boolean
-    extend: Record<string, (args: Pick<T_CallbackArgs, 'date' | 'dateStr'>) => unknown>
+    exclude: (args: T_CallbackArgs) => boolean
+    extend: Record<string, (args: T_CallbackArgs) => unknown>
     onError: (error: T_Error) => unknown
 }
 
 export type T_CoreInitialArgs = Partial<T_ArgsBase>
 
-export type T_CallbackArgs = {
-    date: Date;
-    dateStr: T_ArgsBase['start'];
+export type T_CoreReturnType = {
+    date: Date
+    utcDate: Date
+    dateStr: string
+    [key: string]: unknown
 }
+
+export type T_CallbackArgs = Pick<T_CoreReturnType, 'date' | 'utcDate' | 'dateStr'>
 
 export interface T_Error extends Error {
     message: string
@@ -35,13 +39,6 @@ export type T_CoreArgs = {
     numericTimeZone: T_ArgsBase['numericTimeZone']
     extend?: T_ArgsBase['extend']
     exclude?: T_ArgsBase['exclude']
-}
-
-export type T_CoreReturnType = {
-    date: Date
-    utcDate: Date
-    dateStr: string
-    [key: string]: unknown
 }
 
 export type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
