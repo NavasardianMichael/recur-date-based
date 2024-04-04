@@ -18,15 +18,15 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
         for(const { unit, portion } of rules) {
             if((typeof portion !== 'number') || isNaN(portion) || !Number.isInteger(portion)) {
                 return (
-                    `${generateErrorPreText('rules', portion)}. The provided value for "${unit}" must be a number.`
+                    `${generateErrorPreText('rules', portion)}. The provided value for *${unit}* must be a number.`
                 )
             }
 
             if(portion <= 0) {
                 return (
                     direction === DIRECTIONS.forward ?
-                    `${generateErrorPreText('rules', portion)}. The provided value for "portion" must be a positive number. Use only positive portions. Instead, you can set direction property to "backward" in "genRecurDateBasedList" configs.` :
-                    `${generateErrorPreText('rules', portion)}. The provided value for "portion" must be a positive number. Use only positive portions. The property "direction" is already set to "backward" in "genRecurDateBasedList" configs.`
+                    `${generateErrorPreText('rules', portion)}. The provided value for *portion* must be a positive number. Use only positive portions. Instead, you can set direction property to *backward* in *genRecurDateBasedList* configs.` :
+                    `${generateErrorPreText('rules', portion)}. The provided value for *portion* must be a positive number. Use only positive portions. The property *direction* is already set to *backward* in *genRecurDateBasedList* configs.`
                 )
             }
     
@@ -34,7 +34,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
 
             if(!Object.keys(INTERVAL_UNITS).includes(unit)) {
                 return (
-                    `${generateErrorPreText('rules', unit)}. The provided "unit" must be one of the types from the following list: ${Object.keys(INTERVAL_UNITS).join(', ')}.`
+                    `${generateErrorPreText('rules', unit)}. The provided *unit* must be one of the types from the following list: ${Object.keys(INTERVAL_UNITS).join(', ')}.`
                 )
             }
         }
@@ -88,11 +88,11 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
         if(isNullish(localeString)) return '';
 
         if(typeof localeString !== 'object') {
-            return `The provided property "localeString" must be an object.`
+            return `The provided property *localeString* must be an object.`
         }
 
         if(numericTimeZone != null && localeString.formatOptions?.timeZone != null) {
-            return `There is an unresolved conflict in the provided configuration object. Either provide "timeZone" property in "localeString.formatOptions" or define the timezone using the property "numericTimeZone".`
+            return `There is an unresolved conflict in the provided configuration object. Either provide *timeZone* property in *localeString.formatOptions* or define the timezone using the property *numericTimeZone*.`
         }
 
         return ''
@@ -101,7 +101,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
         if(isNullish(filter)) return '';
 
         if(typeof filter !== 'function') {
-            return `The provided property "filter" must be a function, which returns a boolean value.`
+            return `The provided property *filter* must be a function, which returns a boolean value.`
         }
 
         return ''
@@ -110,7 +110,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
         if(isNullish(extend)) return '';
 
         if(typeof extend !== 'object') {
-            return `The provided property "extend" must be an object.`
+            return `The provided property *extend* must be an object.`
         }
 
         return ''

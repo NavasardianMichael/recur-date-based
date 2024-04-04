@@ -49,5 +49,5 @@ export function checkInvalidData(args: T_CoreInitialArgs): void {
 }
 
 export const generateErrorPreText = (key: keyof T_ArgsBase, value: unknown) => {
-    return `Invalid property "${key}" (received ${value || (value === '' ? "empty string" : value)})`
+    return `Invalid property "${key}" (received *${value || (value === '' ? 'empty string' : value)}*)`
 }
