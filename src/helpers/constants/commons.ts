@@ -1,4 +1,4 @@
-import { E_Direction, E_IntervalTypes, T_CoreInitialArgs } from "../types/types";
+import { T_CoreInitialArgs } from '../types/lib'
 
 export const ERRORS = {
     outputLimit: {
@@ -7,14 +7,29 @@ export const ERRORS = {
     }
 }
 
+export const INTERVAL_UNITS = {
+    millisecond: 'millisecond',
+    minute: 'minute',
+    hour: 'hour',
+    day: 'day',
+    week: 'week',
+    month: 'month',
+    year: 'year',
+} as const
+
+export const DIRECTIONS = {
+    backward: 'backward', 
+    forward: 'forward',
+} as const
+
 export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimeZone' | 'filter' | 'onError' | 'localeString'> = {
     start: new Date(),
     end: 10,
     rules: [{
         portion: 1,
-        unit: E_IntervalTypes.day
+        unit: INTERVAL_UNITS.day
     }],
-    direction: E_Direction.forward,
+    direction: DIRECTIONS.forward,
 }
 
 export const TODAY = new Date()

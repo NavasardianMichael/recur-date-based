@@ -1,11 +1,12 @@
-import { TODAY } from '../constants/commons'
+import { TODAY, INTERVAL_UNITS, DIRECTIONS } from '../constants/commons'
+import { ObjectValuesMap } from './shared'
 
 export type T_ArgsBase = {
     start: string | Date
     end: number | string | Date
     rules: T_Rules
     numericTimeZone: number 
-    direction: keyof typeof E_Direction
+    direction: ObjectValuesMap<typeof DIRECTIONS>
     localeString: T_LocaleString
     filter: (args: T_CallbackArgs) => boolean
     extend: Record<string, (args: T_CallbackArgs) => unknown>
@@ -45,26 +46,14 @@ export type T_CoreArgs = {
 
 export type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
 
-export enum E_IntervalTypes {
-    millisecond = 'millisecond',
-    minute = 'minute',
-    hour = 'hour',
-    day = 'day',
-    week = 'week',
-    month = 'month',
-    year = 'year'
-}
+export type T_IntervalUnit = ObjectValuesMap<typeof INTERVAL_UNITS>
+export type T_Direction = ObjectValuesMap<typeof DIRECTIONS>
 
 export type T_Rules = T_Rule[]
 
 export type T_Rule = {
-    unit: E_IntervalTypes
+    unit: T_IntervalUnit
     portion: number
-}
-
-export enum E_Direction {
-    backward = 'backward', 
-    forward = 'forward'
 }
 
 export type T_PostponeArgs = Pick<T_CoreArgs, 'start' | 'rules'>

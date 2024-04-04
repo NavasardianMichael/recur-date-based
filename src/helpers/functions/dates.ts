@@ -1,5 +1,5 @@
-import { T_CoreInitialArgs } from "../types/types"
-import { pad } from "./commons"
+import { T_CoreInitialArgs } from '../types/lib'
+import { pad } from "./shared"
 
 export const setTimeZoneOffset = (date: Date, offset: number, resetCurrent: boolean = true) => {
     if(resetCurrent) date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000))

@@ -1,11 +1,10 @@
-import { isNullish } from '../functions/commons';
+import { isNullish } from '../functions/shared';
 import { isValidDate } from '../functions/dates';
 import { generateErrorPreText } from '../functions/lib';
-import { E_Direction, E_IntervalTypes, T_ArgsBase, T_CoreInitialArgs } from '../types/types';
+import { T_ArgsBase, T_CoreInitialArgs } from '../types/lib';
+import { DIRECTIONS, INTERVAL_UNITS } from './commons';
 
-export const VALIDATORS: {
-    [key in keyof T_ArgsBase]: (args: T_CoreInitialArgs) => string
-} = {
+export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => string> = {
     start: ({ start }) => {
         if(isNullish(start) || isValidDate(start)) return '';
 
@@ -17,11 +16,7 @@ export const VALIDATORS: {
         if(isNullish(rules)) return '';
 
         for(const { unit, portion } of rules) {
-            if(
-                (typeof portion !== 'number') || 
-                isNaN(portion) || 
-                !Number.isInteger(portion)
-            ) {
+            if((typeof portion !== 'number') || isNaN(portion) || !Number.isInteger(portion)) {
                 return (
                     `${generateErrorPreText('rules', portion)}. The provided value for "${unit}" must be a number.`
                 )
@@ -29,17 +24,17 @@ export const VALIDATORS: {
 
             if(portion <= 0) {
                 return (
-                    direction === E_Direction.forward ?
-                    `${generateErrorPreText('rules', portion)}. The provided value for "${unit}" (and for all the portions as well) must be a positive number. Use only positive portions. Instead, you can set direction property to "backward" in "genRecurDateBasedList" configs.` :
-                    `${generateErrorPreText('rules', portion)}. The provided value for "${unit}" (and for all the portions as well) must be a positive number. Use only positive portions. The property "direction" is already set to "backward" in "genRecurDateBasedList" configs.`
+                    direction === DIRECTIONS.forward ?
+                    `${generateErrorPreText('rules', portion)}. The provided value for "portion" must be a positive number. Use only positive portions. Instead, you can set direction property to "backward" in "genRecurDateBasedList" configs.` :
+                    `${generateErrorPreText('rules', portion)}. The provided value for "portion" must be a positive number. Use only positive portions. The property "direction" is already set to "backward" in "genRecurDateBasedList" configs.`
                 )
             }
     
             if(isNullish(unit)) return '';
 
-            if(!Object.keys(E_IntervalTypes).includes(unit)) {
+            if(!Object.keys(INTERVAL_UNITS).includes(unit)) {
                 return (
-                    `${generateErrorPreText('rules', unit)}. The provided "unit" must be one of the types from the following list: ${Object.keys(E_IntervalTypes).join(', ')}.`
+                    `${generateErrorPreText('rules', unit)}. The provided "unit" must be one of the types from the following list: ${Object.keys(INTERVAL_UNITS).join(', ')}.`
                 )
             }
         }
@@ -64,9 +59,9 @@ export const VALIDATORS: {
     direction: ({ direction }) => {
         if(isNullish(direction)) return '';
 
-        if(!Object.keys(E_Direction).includes(direction)) {
+        if(!Object.keys(DIRECTIONS).includes(direction)) {
             return (
-                `${generateErrorPreText('direction', direction)}. The provided value must be one of the members from the following list: ${JSON.stringify(Object.keys(E_Direction))}.`
+                `${generateErrorPreText('direction', direction)}. The provided value must be one of the members from the following list: ${JSON.stringify(Object.keys(DIRECTIONS))}.`
             )
         }
 

@@ -1,9 +1,9 @@
-import { DEFAULT_ARGS, ERRORS, TODAY } from "./helpers/constants/commons"
+import { DEFAULT_ARGS, DIRECTIONS, ERRORS, TODAY } from "./helpers/constants/commons"
 import { POSTPONERS } from './helpers/constants/postponers'
-import { cloneDate } from './helpers/functions/commons'
+import { cloneDate } from './helpers/functions/shared'
 import { setTimeZoneOffset, toAdjustedTimezoneISOString } from "./helpers/functions/dates"
 import { checkInvalidData, processInitialArgs } from "./helpers/functions/lib"
-import { E_Direction, T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from "./helpers/types/types"
+import { T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from './helpers/types/lib'
 
 export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
     
@@ -14,7 +14,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
         
         const f_Args = processInitialArgs(args)
         
-        const isDirectionForward = f_Args.direction === E_Direction.forward
+        const isDirectionForward = f_Args.direction === DIRECTIONS.forward
         let iterations: number = 0 
 
         const postpone = (date: T_PostponeArgs['start']) => {

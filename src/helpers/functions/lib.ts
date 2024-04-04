@@ -1,7 +1,7 @@
 import { DEFAULT_ARGS } from "../constants/commons"
 import { POSTPONERS } from '../constants/postponers'
 import { VALIDATORS } from '../constants/validators'
-import { T_ArgsBase, T_CoreArgs, T_CoreInitialArgs } from "../types/types"
+import { T_ArgsBase, T_CoreArgs, T_CoreInitialArgs } from '../types/lib'
 import { isDateObject, setTimeZoneOffset } from "./dates"
 
 export function getEndDate({ 
