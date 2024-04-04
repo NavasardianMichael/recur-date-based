@@ -31,5 +31,3 @@ export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimeZone' | 'filter' 
     }],
     direction: DIRECTIONS.forward,
 }
-
-export const TODAY = new Date()

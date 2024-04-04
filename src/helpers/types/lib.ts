@@ -1,4 +1,5 @@
-import { TODAY, INTERVAL_UNITS, DIRECTIONS } from '../constants/commons'
+import { INTERVAL_UNITS, DIRECTIONS } from '../constants/commons'
+import { TODAY } from '../constants/shared'
 import { ObjectValuesMap } from './shared'
 
 export type T_ArgsBase = {
