@@ -6,16 +6,18 @@ export type T_ArgsBase = {
     rules: T_Rules
     numericTimeZone: number 
     direction: keyof typeof E_Direction
-    localeString: {
-        lang: Parameters<typeof TODAY.toLocaleString>[0]
-        formatOptions: Intl.DateTimeFormatOptions
-    }
+    localeString: T_LocaleString
     exclude: (args: T_CallbackArgs) => boolean
     extend: Record<string, (args: T_CallbackArgs) => unknown>
     onError: (error: T_Error) => unknown
 }
 
 export type T_CoreInitialArgs = Partial<T_ArgsBase>
+
+type T_LocaleString = {
+    lang?: Parameters<typeof TODAY.toLocaleString>[0]
+    formatOptions?: Intl.DateTimeFormatOptions
+}
 
 export type T_CoreReturnType = {
     date: Date
