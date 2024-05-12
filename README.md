@@ -1,6 +1,6 @@
 ## Summary
 
-The project provides a unique functionality related to JavaScript dates. It allows generating recurring dates based on a certain input shape. Its name is in harmony with its essence: the exported function gives an opportunity to generate additional properties based on the date of the current iteration.
+The project provides a unique functionality related to JavaScript dates. It allows generating recurring dates based on a certain input shape. Its name is in harmony with its essence: the package delivers a functionality of more than just repetitive date generation, but it gives an opportunity to have access to the date of each iteration and generate additional properties based on it.
 
 <b>The complete documentation is available <a target="_blank" href='https://navasardianmichael.github.io/recur-date-based-docs'>HERE</a></b>.
 
