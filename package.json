@@ -1,0 +1,43 @@
+{
+  "version": "1.4.1",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "nodemon playground",
+    "watch": "tsdx watch",
+    "build": "tsdx build"
+  },
+  "name": "recur-date-based",
+  "author": "NavasardianMichael",
+  "keywords": [
+    "recurrence",
+    "recurring dates",
+    "extended props",
+    "events",
+    "repeating dates",
+    "date generation",
+    "multiple occurrences",
+    "date properties",
+    "date manipulation",
+    "date utility",
+    "date calculations",
+    "past dates",
+    "future dates"
+  ],
+  "description": "Generate recurring dates and extra props based on them.",
+  "module": "dist/recur-date-based.esm.js",
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.6.2",
+    "typescript": "^3.9.10"
+  }
+}
