@@ -1,4 +1,4 @@
-import { T_CoreInitialArgs } from '../types/lib'
+import { T_ArgsBase } from '../types/lib'
 
 export const ERRORS = {
     outputLimit: {
@@ -22,7 +22,7 @@ export const DIRECTIONS = {
     forward: 'forward',
 } as const
 
-export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimeZone' | 'filter' | 'onError' | 'localeString'> = {
+export const DEFAULT_ARGS: Omit<T_ArgsBase, 'numericTimeZone' | 'filter' | 'onError' | 'localeString'> = {
     start: new Date(),
     end: 10,
     rules: [{
@@ -30,4 +30,5 @@ export const DEFAULT_ARGS: Omit<T_CoreInitialArgs, 'numericTimeZone' | 'filter' 
         unit: INTERVAL_UNITS.day
     }],
     direction: DIRECTIONS.forward,
+    extend: {}
 }

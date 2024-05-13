@@ -1,5 +1,5 @@
 {
-  "version": "1.3.9",
+  "version": "1.4.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -16,7 +16,7 @@
     "build": "tsdx build"
   },
   "name": "recur-date-based",
-  "author": "Michael Navasardyan",
+  "author": "NavasardianMichael",
   "keywords": [
     "recurrence",
     "recurring dates",
@@ -35,12 +35,9 @@
   "description": "Generate recurring dates and extra props based on them.",
   "module": "dist/recur-date-based.esm.js",
   "devDependencies": {
-    "nodemon": "^2.0.16",
+    "nodemon": "^3.1.0",
     "tsdx": "^0.14.1",
-    "tslib": "^2.4.0",
-    "typescript": "^4.6.4"
-  },
-  "dependencies": {
-    "sharp": "^0.33.3"
+    "tslib": "^2.6.2",
+    "typescript": "^3.9.10"
   }
 }

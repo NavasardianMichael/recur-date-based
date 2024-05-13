@@ -60,7 +60,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) =>  {
                 utcDate: (
                     f_Args.localeString?.formatOptions?.timeZone ? 
                     cloneDate(currentStartDate) : 
-                    setTimeZoneOffset(cloneDate(currentStartDate), -f_Args.numericTimeZone || TODAY.getTimezoneOffset() / 60, false)
+                    setTimeZoneOffset(cloneDate(currentStartDate), -f_Args?.numericTimeZone, false)
                 )
             }
 

@@ -6,7 +6,7 @@ export type T_ArgsBase = {
     start: string | Date
     end: number | string | Date
     rules: T_Rules
-    numericTimeZone: number 
+    numericTimeZone: number
     direction: ObjectValuesMap<typeof DIRECTIONS>
     localeString: T_LocaleString
     filter: (args: T_CallbackArgs) => boolean

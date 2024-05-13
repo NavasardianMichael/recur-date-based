@@ -1,4 +1,4 @@
-import { T_CoreInitialArgs } from '../types/lib'
+import { T_ArgsBase } from '../types/lib'
 import { pad } from "./shared"
 
 export const setTimeZoneOffset = (date: Date, offset: number, resetCurrent: boolean = true) => {
@@ -12,7 +12,7 @@ export const isDateObject = (date: unknown) => {
     return Object.prototype.toString.call(date) === "[object Date]"
 }
 
-export const isValidDate = (date: T_CoreInitialArgs['start']) => {
+export const isValidDate = (date: T_ArgsBase['start']) => {
     const processedDate = new Date(date)
     
     if (isDateObject(processedDate)) {

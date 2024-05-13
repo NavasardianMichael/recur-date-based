@@ -6,7 +6,7 @@ import { DIRECTIONS, INTERVAL_UNITS } from './commons';
 
 export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => string> = {
     start: ({ start }) => {
-        if(isNullish(start) || isValidDate(start)) return '';
+        if(isNullish(start) || isValidDate(start!)) return '';
 
         return (
             `${generateErrorPreText('start', start)}. The provided value must be either a string, which can be formatted into a valid date, or a Date.`
@@ -15,7 +15,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
     rules: ({ rules, direction }) => {
         if(isNullish(rules)) return '';
 
-        for(const { unit, portion } of rules) {
+        for(const { unit, portion } of rules!) {
             if((typeof portion !== 'number') || isNaN(portion) || !Number.isInteger(portion)) {
                 return (
                     `${generateErrorPreText('rules', portion)}. The provided value for *${unit}* must be a number.`
@@ -49,7 +49,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
         )
         
         if(
-            (typeof end !== 'string' && typeof end !== 'number' && !isValidDate(end)) ||
+            (typeof end !== 'string' && typeof end !== 'number' && !isValidDate(end!)) ||
             (typeof end === 'string' && !isValidDate(end)) ||
             (typeof end === 'number' && (end > 99_999 || isNaN(end)))
         ) return message
@@ -59,7 +59,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
     direction: ({ direction }) => {
         if(isNullish(direction)) return '';
 
-        if(!Object.keys(DIRECTIONS).includes(direction)) {
+        if(!Object.keys(DIRECTIONS).includes(direction!)) {
             return (
                 `${generateErrorPreText('direction', direction)}. The provided value must be one of the members from the following list: ${JSON.stringify(Object.keys(DIRECTIONS))}.`
             )
