@@ -1,1 +1,1 @@
-export type ObjectValuesMap<T> = T[keyof T] 
+export type ObjectValuesMap<T> = T[keyof T]
