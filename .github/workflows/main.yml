@@ -20,7 +20,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install deps and build (with cache)
-        uses: pnpm install
+        run: yarn add
 
       - name: Build
-        run: pnpm build
+        run: yarn build
