@@ -1,4 +1,6 @@
 import { INTERVAL_UNITS, DIRECTIONS } from '../constants/commons'
+import { OUTPUT_FORMATS } from '../constants/formats'
+
 import { TODAY } from '../constants/shared'
 import { ObjectValuesMap } from './shared'
 
@@ -9,6 +11,7 @@ export type T_ArgsBase = {
   numericTimeZone: number
   direction: ObjectValuesMap<typeof DIRECTIONS>
   localeString: T_LocaleString
+  outputFormat?: T_OutputFormat
   filter: (args: T_CallbackArgs) => boolean
   extend: Record<string, (args: T_CallbackArgs) => unknown>
   onError: (error: T_Error) => unknown
@@ -40,6 +43,7 @@ export type T_CoreArgs = {
   rules: T_ArgsBase['rules']
   direction: T_ArgsBase['direction']
   localeString: T_ArgsBase['localeString']
+  outputFormat?: T_ArgsBase['outputFormat']
   numericTimeZone: T_ArgsBase['numericTimeZone']
   extend?: T_ArgsBase['extend']
   filter?: T_ArgsBase['filter']
@@ -58,3 +62,6 @@ export type T_Rule = {
 }
 
 export type T_PostponeArgs = Pick<T_CoreArgs, 'start' | 'rules'>
+
+
+export type T_OutputFormat = (typeof OUTPUT_FORMATS)[number]

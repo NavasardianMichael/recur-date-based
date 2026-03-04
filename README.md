@@ -4,11 +4,8 @@ The project provides a unique functionality related to JavaScript dates. It allo
 
 <b>The complete documentation is available <a target="_blank" href='https://navasardianmichael.github.io/recur-date-based-docs'>HERE</a></b>.
 
-
 ![npm bundle size(min)](https://img.shields.io/bundlephobia/min/recur-date-based.svg)
 ![npm bundle size(min+gzip)](https://img.shields.io/bundlephobia/minzip/recur-date-based.svg)
-
-
 
 ## License
 

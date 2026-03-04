@@ -1,7 +1,7 @@
 import { DEFAULT_ARGS, DIRECTIONS, ERRORS } from './helpers/constants/commons'
 import { POSTPONERS } from './helpers/constants/postponers'
 import { cloneDate } from './helpers/functions/shared'
-import { setTimeZoneOffset, toAdjustedTimezoneISOString } from './helpers/functions/dates'
+import { formatDateByOutputFormat, setTimeZoneOffset, toAdjustedTimezoneISOString } from './helpers/functions/dates'
 import { checkInvalidData, processInitialArgs } from './helpers/functions/lib'
 import { T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from './helpers/types/lib'
 import { TODAY } from './helpers/constants/shared'
@@ -31,9 +31,19 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) => {
         throw new Error(ERRORS.outputLimit.errorText)
       }
 
-      const dateStr = f_Args.localeString
-        ? f_Args.start.toLocaleString(f_Args.localeString.lang, f_Args.localeString.formatOptions)
-        : toAdjustedTimezoneISOString(f_Args.start)
+      const outputLocale =
+        f_Args.localeString?.lang == null
+          ? 'en-US'
+          : typeof f_Args.localeString.lang === 'string'
+            ? f_Args.localeString.lang
+            : Array.isArray(f_Args.localeString.lang)
+              ? String(f_Args.localeString.lang[0] ?? 'en-US')
+              : String(f_Args.localeString.lang)
+      const dateStr = f_Args.outputFormat
+        ? formatDateByOutputFormat(f_Args.start, f_Args.outputFormat, outputLocale)
+        : f_Args.localeString?.lang != null || (f_Args.localeString?.formatOptions && Object.keys(f_Args.localeString.formatOptions).length > 0)
+          ? f_Args.start.toLocaleString(f_Args.localeString.lang, f_Args.localeString.formatOptions)
+          : toAdjustedTimezoneISOString(f_Args.start)
 
       const currentStartDate = cloneDate(f_Args.start)
 

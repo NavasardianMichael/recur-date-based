@@ -3,6 +3,7 @@ import { isValidDate } from '../functions/dates'
 import { generateErrorPreText } from '../functions/lib'
 import { T_ArgsBase, T_CoreInitialArgs } from '../types/lib'
 import { DIRECTIONS, INTERVAL_UNITS } from './commons'
+import { OUTPUT_FORMATS } from './formats'
 
 export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => string> = {
   start: ({ start }) => {
@@ -71,7 +72,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
 
     return ''
   },
-  localeString: ({ localeString, numericTimeZone }) => {
+  localeString: ({ localeString, numericTimeZone, outputFormat }) => {
     if (isNullish(localeString)) return ''
 
     if (typeof localeString !== 'object') {
@@ -80,6 +81,32 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
 
     if (numericTimeZone != null && localeString.formatOptions?.timeZone != null) {
       return `There is an unresolved conflict in the provided configuration object. Either provide *timeZone* property in *localeString.formatOptions* or define the timezone using the property *numericTimeZone*.`
+    }
+
+    const hasFormatOptions = localeString.formatOptions != null && Object.keys(localeString.formatOptions).length > 0
+    if (outputFormat != null && hasFormatOptions) {
+      return `Using *outputFormat* and *localeString.formatOptions* at the same time may cause conflicts in the output format. Either provide *outputFormat* or *localeString.formatOptions* in the configuration object, but not both.`
+    }
+
+    return ''
+  },
+  outputFormat: ({ outputFormat, localeString }) => {
+    if (isNullish(outputFormat)) return ''
+
+    if (typeof outputFormat !== 'string') {
+      return `${generateErrorPreText('outputFormat', outputFormat)}. The provided value must be one of the supported format strings. Use OUTPUT_FORMATS from the library.`
+    }
+
+    if (!(OUTPUT_FORMATS as readonly string[]).includes(outputFormat)) {
+      return `${generateErrorPreText('outputFormat', outputFormat)}. The format must be one of: ${OUTPUT_FORMATS.join(', ')}.`
+    }
+
+    const hasFormatOptions =
+      localeString != null &&
+      localeString.formatOptions != null &&
+      Object.keys(localeString.formatOptions).length > 0
+    if (hasFormatOptions) {
+      return `Using *outputFormat* and *localeString.formatOptions* at the same time may cause conflicts in the output format. Either provide *outputFormat* or *localeString.formatOptions* in the configuration object, but not both.`
     }
 
     return ''

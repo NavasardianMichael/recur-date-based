@@ -32,6 +32,7 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
     rules: args.rules?.length ? args.rules : DEFAULT_ARGS.rules,
     direction: args.direction ?? DEFAULT_ARGS.direction,
     localeString: args.localeString ?? {},
+    outputFormat: args.outputFormat,
     extend: args.extend,
     filter: args.filter,
     numericTimeZone: args.numericTimeZone ?? TODAY.getTimezoneOffset() / 60,
