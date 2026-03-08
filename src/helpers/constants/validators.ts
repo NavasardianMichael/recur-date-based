@@ -97,14 +97,12 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
       return `${generateErrorPreText('outputFormat', outputFormat)}. The provided value must be one of the supported format strings. Use OUTPUT_FORMATS from the library.`
     }
 
-    if (!(OUTPUT_FORMATS as readonly string[]).includes(outputFormat)) {
-      return `${generateErrorPreText('outputFormat', outputFormat)}. The format must be one of: ${OUTPUT_FORMATS.join(', ')}.`
+    if (!OUTPUT_FORMATS.includes(outputFormat)) {
+      return `${generateErrorPreText('outputFormat', outputFormat)}. The format must be one of the supported strings. Use one of the *OUTPUT_FORMATS* exported from the library.`
     }
 
     const hasFormatOptions =
-      localeString != null &&
-      localeString.formatOptions != null &&
-      Object.keys(localeString.formatOptions).length > 0
+      localeString != null && localeString.formatOptions != null && Object.keys(localeString.formatOptions).length > 0
     if (hasFormatOptions) {
       return `Using *outputFormat* and *localeString.formatOptions* at the same time may cause conflicts in the output format. Either provide *outputFormat* or *localeString.formatOptions* in the configuration object, but not both.`
     }

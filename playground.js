@@ -2,7 +2,7 @@ const package = require('./dist')
 const list = package.genRecurDateBasedList({
   start: '2023-04-01T16:30:00',
   end: 2,
-  outputFormat: 'MMM DD, YYYY hh:mm:ss',
+  outputFormat: 'MMM DD, YYYY',
   localeString: {
     lang: 'hy-AM',
     // formatOptions: { timeZone: 'UTC' },

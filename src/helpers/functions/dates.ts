@@ -38,10 +38,37 @@ export const toAdjustedTimezoneISOString = (date: Date) => {
   )
 }
 
-function getDayOfYear(date: Date): number {
+function getDayOfYear(date: Date, useUtc: boolean = false): number {
+  if (useUtc) {
+    const y = date.getUTCFullYear()
+    const start = Date.UTC(y, 0, 0)
+    const diff = date.getTime() - start
+    return Math.floor(diff / (24 * 60 * 60 * 1000))
+  }
   const start = new Date(date.getFullYear(), 0, 0)
   const diff = date.getTime() - start.getTime() + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000
   return Math.floor(diff / (24 * 60 * 60 * 1000))
+}
+
+const INTL_FORMAT_CACHE = new Map<
+  string,
+  { monthShort: Intl.DateTimeFormat; monthLong: Intl.DateTimeFormat; weekdayLong: Intl.DateTimeFormat; weekdayShort: Intl.DateTimeFormat }
+>()
+
+function getIntlFormatters(locale: string, useUtc: boolean) {
+  const key = `${locale}\0${useUtc}`
+  let cached = INTL_FORMAT_CACHE.get(key)
+  if (!cached) {
+    const intlOpts = useUtc ? { timeZone: 'UTC' as const } : {}
+    cached = {
+      monthShort: new Intl.DateTimeFormat(locale, { month: 'short', ...intlOpts }),
+      monthLong: new Intl.DateTimeFormat(locale, { month: 'long', ...intlOpts }),
+      weekdayLong: new Intl.DateTimeFormat(locale, { weekday: 'long', ...intlOpts }),
+      weekdayShort: new Intl.DateTimeFormat(locale, { weekday: 'short', ...intlOpts }),
+    }
+    INTL_FORMAT_CACHE.set(key, cached)
+  }
+  return cached
 }
 
 /** Format timezone offset as +HH:mm or -HH:mm (e.g. +00:00, -05:00). */
@@ -56,8 +83,8 @@ function getTimezoneOffsetString(date: Date): string {
 
 /**
  * Format a date according to a supported output format string.
- * Supports YYYY/MM/DD and yyyy/mm/dd conventions; mm in date = month, in time = minutes.
- * Z or " Z" = timezone offset. Uses 'en-US' for month names (MMM, MMMM) when locale is not provided.
+ * All tokens are uppercase: YYYY/YY, MM/M, DD/D, HH, MM (minutes in time), SS, SSS, A (AM/PM), EEE/EEEE (weekday), MMM/MMMM, DDD (day of year), Z (timezone).
+ * Format containing ` GMT` uses UTC. Month/weekday names use the given locale (default 'en-US').
  */
 export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, locale: string = 'en-US'): string {
   const useUtc = format.includes(' GMT')
@@ -74,63 +101,51 @@ export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, loc
   const hour12 = hours % 12 === 0 ? 12 : hours % 12
   const ampm = hours < 12 ? 'AM' : 'PM'
 
-  const intlOpts = useUtc ? { timeZone: 'UTC' as const } : {}
-  const monthShort = new Intl.DateTimeFormat(locale, { month: 'short', ...intlOpts }).format(date)
-  const monthLong = new Intl.DateTimeFormat(locale, { month: 'long', ...intlOpts }).format(date)
-  const weekdayLong = new Intl.DateTimeFormat(locale, { weekday: 'long', ...intlOpts }).format(date)
-  const weekdayShort = new Intl.DateTimeFormat(locale, { weekday: 'short', ...intlOpts }).format(date)
+  const { monthShort: monthShortFmt, monthLong: monthLongFmt, weekdayLong: weekdayLongFmt, weekdayShort: weekdayShortFmt } = getIntlFormatters(locale, useUtc)
+  const monthShort = monthShortFmt.format(date)
+  const monthLong = monthLongFmt.format(date)
+  const weekdayLong = weekdayLongFmt.format(date)
+  const weekdayShort = weekdayShortFmt.format(date)
 
-  const dayOfYear = getDayOfYear(date)
+  const dayOfYear = getDayOfYear(date, useUtc)
   const tzStr = getTimezoneOffsetString(date)
   const monthPadded = pad(month + 1)
   const dayPadded = pad(day)
 
-  // 1. Weekday and month names (longest first)
+  // 1. Weekday (EEEE/EEE) and month names (longest first)
   let out = format
-    .replace(/dddd/g, weekdayLong)
-    .replace(/ddd/g, weekdayShort)
+    .replace(/EEEE/g, weekdayLong)
+    .replace(/EEE/g, weekdayShort)
     .replace(/MMMM/g, monthLong)
     .replace(/MMM/g, monthShort)
 
   // 2. Year
-  out = out
-    .replace(/YYYY/g, String(year))
-    .replace(/yyyy/g, String(year))
-    .replace(/YY/g, String(year).slice(-2))
-    .replace(/yy/g, String(year).slice(-2))
+  out = out.replace(/YYYY/g, String(year)).replace(/YY/g, String(year).slice(-2))
 
   // 3. Day of year
-  out = out.replace(/DDD/g, pad3(dayOfYear)).replace(/ddd/g, pad3(dayOfYear))
+  out = out.replace(/DDD/g, pad3(dayOfYear))
 
-  // 4. Minutes in time context (before replacing month mm): :mm: or :mm. or :mm at end
-  out = out.replace(/:mm(?=:|\.|$)/g, `:${pad(minutes)}`)
+  // 4. Minutes in time context (before month MM): :MM: or :MM. or :MM at end
+  out = out.replace(/:MM(?=:|\.|$)/g, `:${pad(minutes)}`)
 
-  // 5. Hour (hh only in time context: hh:mm or hh:mm:ss etc.), seconds, ms, AM/PM
+  // 5. Hour (HH), seconds (SS), ms (SSS), AM/PM (A)
   const hourStr = use12h ? pad(hour12) : pad(hour24)
   out = out
-    .replace(/HH/g, pad(hour24))
-    .replace(/hh(?=:)/g, hourStr)
-    .replace(/ss/g, pad(seconds))
+    .replace(/HH/g, hourStr)
     .replace(/SSS/g, pad3(ms))
+    .replace(/SS/g, pad(seconds))
     .replace(/ A$/g, ` ${ampm}`)
     .replace(/ A /g, ` ${ampm} `)
     .replace(/^A /g, `${ampm} `)
     .replace(/ A/g, ` ${ampm}`)
 
-  // 6. Month 2-digit: MM and mm in date context (-mm-, /mm/, .mm., leading mm/)
+  // 6. Month 2-digit (MM in date context)
   out = out.replace(/MM/g, monthPadded)
-  out = out.replace(/-mm-/g, `-${monthPadded}-`).replace(/\/mm\//g, `/${monthPadded}/`).replace(/\.mm\./g, `.${monthPadded}.`)
-  out = out.replace(/^mm\//g, `${monthPadded}/`).replace(/^mm-/g, `${monthPadded}-`)
-  out = out.replace(/\/mm$/g, `/${monthPadded}`).replace(/-mm$/g, `-${monthPadded}`)
-  out = out.replace(/\bmm\b/g, monthPadded)
 
   // 7. Day 2-digit
-  out = out.replace(/DD/g, dayPadded).replace(/\bdd\b/g, dayPadded)
-  out = out.replace(/-dd-/g, `-${dayPadded}-`).replace(/\/dd\//g, `/${dayPadded}/`).replace(/\.dd\./g, `.${dayPadded}.`)
-  out = out.replace(/^dd\//g, `${dayPadded}/`).replace(/^dd-/g, `${dayPadded}-`)
-  out = out.replace(/\/dd$/g, `/${dayPadded}`).replace(/-dd$/g, `-${dayPadded}`)
+  out = out.replace(/DD/g, dayPadded)
 
-  // 8. Single M / D (unpadded month/day) - only when not part of MM/DD
+  // 8. Single M / D (unpadded month/day)
   out = out.replace(/(?<![DM])D(?!D)/g, String(day)).replace(/(?<![DM])M(?!M)/g, String(month + 1))
 
   // 9. Timezone Z
