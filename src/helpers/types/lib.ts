@@ -63,5 +63,9 @@ export type T_Rule = {
 
 export type T_PostponeArgs = Pick<T_CoreArgs, 'start' | 'rules'>
 
-
+/**
+ * Union type of every supported output format string. Each value is one of the strings in the OUTPUT_FORMATS array. Use for the outputFormat option or as the second argument to formatDate.
+ *
+ * @see OUTPUT_FORMATS
+ */
 export type T_OutputFormat = (typeof OUTPUT_FORMATS)[number]

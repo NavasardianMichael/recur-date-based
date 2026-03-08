@@ -19,13 +19,8 @@ export function getEndDate({ start, rules, direction, end }: T_CoreArgs): Date {
   return f_End
 }
 
-// start = DEFAULT_ARGS.start,
-// rules = DEFAULT_ARGS.rules,
-// direction = DEFAULT_ARGS.direction,
-// end = DEFAULT_ARGS.end,
-
 export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
-  const start = new Date(args.start ?? DEFAULT_ARGS.start)
+  const start = args.start === undefined ? TODAY : new Date(args.start)
 
   let result = {
     start: args.numericTimeZone ? setTimeZoneOffset(start, args.numericTimeZone) : start,
@@ -50,8 +45,4 @@ export function checkInvalidData(args: T_CoreInitialArgs): void {
     const errorMessage = checker(args)
     if (errorMessage) throw new Error(errorMessage)
   })
-}
-
-export const generateErrorPreText = (key: keyof T_CoreArgs, value: unknown) => {
-  return `Invalid property "${key}" (received *${value || (value === '' ? 'empty string' : value)}*)`
 }

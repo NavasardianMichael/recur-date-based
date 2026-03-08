@@ -1,6 +1,6 @@
 import { isNullish } from '../functions/shared'
 import { isValidDate } from '../functions/dates'
-import { generateErrorPreText } from '../functions/lib'
+import { generateErrorPreText, hasFormatOptions } from '../functions/shared'
 import { T_ArgsBase, T_CoreInitialArgs } from '../types/lib'
 import { DIRECTIONS, INTERVAL_UNITS } from './commons'
 import { OUTPUT_FORMATS } from './formats'
@@ -83,8 +83,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
       return `There is an unresolved conflict in the provided configuration object. Either provide *timeZone* property in *localeString.formatOptions* or define the timezone using the property *numericTimeZone*.`
     }
 
-    const hasFormatOptions = localeString.formatOptions != null && Object.keys(localeString.formatOptions).length > 0
-    if (outputFormat != null && hasFormatOptions) {
+    if (outputFormat != null && hasFormatOptions(localeString)) {
       return `Using *outputFormat* and *localeString.formatOptions* at the same time may cause conflicts in the output format. Either provide *outputFormat* or *localeString.formatOptions* in the configuration object, but not both.`
     }
 
@@ -101,9 +100,7 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
       return `${generateErrorPreText('outputFormat', outputFormat)}. The format must be one of the supported strings. Use one of the *OUTPUT_FORMATS* exported from the library.`
     }
 
-    const hasFormatOptions =
-      localeString != null && localeString.formatOptions != null && Object.keys(localeString.formatOptions).length > 0
-    if (hasFormatOptions) {
+    if (hasFormatOptions(localeString)) {
       return `Using *outputFormat* and *localeString.formatOptions* at the same time may cause conflicts in the output format. Either provide *outputFormat* or *localeString.formatOptions* in the configuration object, but not both.`
     }
 

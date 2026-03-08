@@ -50,6 +50,7 @@ function getDayOfYear(date: Date, useUtc: boolean = false): number {
   return Math.floor(diff / (24 * 60 * 60 * 1000))
 }
 
+const MAX_INTL_CACHE_SIZE = 32
 const INTL_FORMAT_CACHE = new Map<
   string,
   { monthShort: Intl.DateTimeFormat; monthLong: Intl.DateTimeFormat; weekdayLong: Intl.DateTimeFormat; weekdayShort: Intl.DateTimeFormat }
@@ -59,6 +60,7 @@ function getIntlFormatters(locale: string, useUtc: boolean) {
   const key = `${locale}\0${useUtc}`
   let cached = INTL_FORMAT_CACHE.get(key)
   if (!cached) {
+    if (INTL_FORMAT_CACHE.size >= MAX_INTL_CACHE_SIZE) INTL_FORMAT_CACHE.clear()
     const intlOpts = useUtc ? { timeZone: 'UTC' as const } : {}
     cached = {
       monthShort: new Intl.DateTimeFormat(locale, { month: 'short', ...intlOpts }),
@@ -71,7 +73,6 @@ function getIntlFormatters(locale: string, useUtc: boolean) {
   return cached
 }
 
-/** Format timezone offset as +HH:mm or -HH:mm (e.g. +00:00, -05:00). */
 function getTimezoneOffsetString(date: Date): string {
   const offsetMin = -date.getTimezoneOffset()
   const sign = offsetMin >= 0 ? '+' : '-'
@@ -82,9 +83,14 @@ function getTimezoneOffsetString(date: Date): string {
 }
 
 /**
- * Format a date according to a supported output format string.
- * All tokens are uppercase: YYYY/YY, MM/M, DD/D, HH, MM (minutes in time), SS, SSS, A (AM/PM), EEE/EEEE (weekday), MMM/MMMM, DDD (day of year), Z (timezone).
- * Format containing ` GMT` uses UTC. Month/weekday names use the given locale (default 'en-US').
+ * Formats a date using a supported output format string from {@link OUTPUT_FORMATS}.
+ *
+ * **Tokens (all uppercase):** YYYY/YY (year), MM/M (month), DD/D (day), HH (hour; 12h when format contains ` A`), MM in time context (minutes), SS (seconds), SSS (milliseconds), A (AM/PM), EEE/EEEE (weekday short/long), MMM/MMMM (month short/long), DDD (day of year), Z (timezone offset e.g. +00:00). Format containing ` GMT` uses UTC getters; otherwise local. Month and weekday names use the given locale.
+ *
+ * @param date - The Date instance to format.
+ * @param format - One of the strings in {@link OUTPUT_FORMATS} (e.g. `'YYYY-MM-DD'`, `'MM/DD/YYYY HH:MM:SS A'`).
+ * @param locale - BCP 47 locale string for month and weekday names (default `'en-US'`).
+ * @returns The formatted date string with all tokens replaced.
  */
 export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, locale: string = 'en-US'): string {
   const useUtc = format.includes(' GMT')

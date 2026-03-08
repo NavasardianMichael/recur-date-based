@@ -22,8 +22,7 @@ export const DIRECTIONS = {
   forward: 'forward',
 } as const
 
-export const DEFAULT_ARGS: Omit<T_ArgsBase, 'numericTimeZone' | 'filter' | 'onError' | 'localeString'> = {
-  start: new Date(),
+export const DEFAULT_ARGS: Partial<T_ArgsBase> & Pick<T_ArgsBase, 'end' | 'rules' | 'direction' | 'extend'> = {
   end: 10,
   rules: [
     {

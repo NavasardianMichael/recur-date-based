@@ -2,10 +2,18 @@ import { DEFAULT_ARGS, DIRECTIONS, ERRORS } from './helpers/constants/commons'
 import { POSTPONERS } from './helpers/constants/postponers'
 import { cloneDate } from './helpers/functions/shared'
 import { formatDateByOutputFormat, setTimeZoneOffset, toAdjustedTimezoneISOString } from './helpers/functions/dates'
-import { checkInvalidData, processInitialArgs } from './helpers/functions/lib'
-import { T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from './helpers/types/lib'
 import { TODAY } from './helpers/constants/shared'
+import { checkInvalidData, processInitialArgs } from './helpers/functions/lib'
+import { hasFormatOptions } from './helpers/functions/shared'
+import { T_Core, T_CoreReturnType, T_Error, T_PostponeArgs } from './helpers/types/lib'
 
+/**
+ * Yields list of recurring dates from `start` to `end` (date or step count), stepping by `rules` in `direction`. Each item has `date`, `utcDate`, `dateStr` and property defined defined in the object `extend`; `filter` can skip iterations.
+ *
+ * @param args - Partial config (start, end, rules, direction, outputFormat, localeString, filter, extend, onError, numericTimeZone). Defaults to `DEFAULT_ARGS`; omit `start` for "now".
+ * @returns Array of {@link T_CoreReturnType}.
+ * @throws {Error} On invalid config or when iteration count exceeds 99_999.
+ */
 export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) => {
   const result: T_CoreReturnType[] = []
 
@@ -41,8 +49,8 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) => {
               : String(f_Args.localeString.lang)
       const dateStr = f_Args.outputFormat
         ? formatDateByOutputFormat(f_Args.start, f_Args.outputFormat, outputLocale)
-        : f_Args.localeString?.lang != null || (f_Args.localeString?.formatOptions && Object.keys(f_Args.localeString.formatOptions).length > 0)
-          ? f_Args.start.toLocaleString(f_Args.localeString.lang, f_Args.localeString.formatOptions)
+        : f_Args.localeString?.lang != null || hasFormatOptions(f_Args.localeString)
+          ? f_Args.start.toLocaleString(f_Args.localeString!.lang, f_Args.localeString!.formatOptions)
           : toAdjustedTimezoneISOString(f_Args.start)
 
       const currentStartDate = cloneDate(f_Args.start)
