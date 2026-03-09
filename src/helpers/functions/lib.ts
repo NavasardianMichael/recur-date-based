@@ -1,9 +1,9 @@
-import { DEFAULT_ARGS } from '../constants/commons'
-import { POSTPONERS } from '../constants/postponers'
-import { TODAY } from '../constants/shared'
-import { VALIDATORS } from '../constants/validators'
-import { T_CoreArgs, T_CoreInitialArgs, T_Rule } from '../types/lib'
-import { isDateObject, setTimeZoneOffset } from './dates'
+import { DEFAULT_ARGS } from '@/helpers/constants/commons'
+import { POSTPONERS } from '@/helpers/constants/postponers'
+import { TODAY } from '@/helpers/constants/shared'
+import { VALIDATORS } from '@/helpers/constants/validators'
+import { T_CoreArgs, T_CoreInitialArgs, T_Rule } from '@/helpers/types/lib'
+import { isDateObject, setTimeZoneOffset } from '@/helpers/functions/dates'
 
 export function getEndDate({ start, rules, direction, end }: T_CoreArgs): Date {
   if (typeof end === 'string') return new Date(end)

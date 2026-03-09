@@ -1,4 +1,4 @@
-import { T_ArgsBase } from '../types/lib'
+import { T_ArgsBase } from '@/helpers/types/lib'
 
 export const ERRORS = {
   outputLimit: {

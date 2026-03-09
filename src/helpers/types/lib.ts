@@ -1,8 +1,7 @@
-import { INTERVAL_UNITS, DIRECTIONS } from '../constants/commons'
-import { OUTPUT_FORMATS } from '../constants/formats'
-
-import { TODAY } from '../constants/shared'
-import { ObjectValuesMap } from './shared'
+import { INTERVAL_UNITS, DIRECTIONS } from '@/helpers/constants/commons'
+import { OUTPUT_FORMATS } from '@/helpers/constants/formats'
+import { TODAY } from '@/helpers/constants/shared'
+import { ObjectValuesMap } from '@/helpers/types/shared'
 
 export type T_ArgsBase = {
   start: string | Date

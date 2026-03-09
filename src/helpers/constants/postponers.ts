@@ -1,5 +1,5 @@
-import { T_CoreArgs, T_IntervalUnit, T_Rule } from '../types/lib'
-import { INTERVAL_UNITS } from './commons'
+import { T_CoreArgs, T_IntervalUnit, T_Rule } from '@/helpers/types/lib'
+import { INTERVAL_UNITS } from '@/helpers/constants/commons'
 
 export const POSTPONERS: Record<
   T_CoreArgs['direction'],

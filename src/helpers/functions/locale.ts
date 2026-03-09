@@ -1,4 +1,4 @@
-import { T_CoreArgs } from '../types/lib'
+import { T_CoreArgs } from '@/helpers/types/lib'
 
 export function getOutputLocale(localeString: T_CoreArgs['localeString']): string {
   if (localeString?.lang == null) return 'en-US'
