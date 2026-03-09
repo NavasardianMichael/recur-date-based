@@ -17,11 +17,9 @@ function buildResultFromDate(
 
   const currentResult: T_CoreReturnType = {
     dateStr,
-    date: setTimeZoneOffset(
-      f_Args.localeString?.formatOptions?.timeZone ? new Date(Date.parse(dateStr)) : currentStartDate,
-      TODAY.getTimezoneOffset() / -60,
-      false
-    ),
+    date: f_Args.localeString?.formatOptions?.timeZone
+      ? setTimeZoneOffset(new Date(Date.parse(dateStr)), TODAY.getTimezoneOffset() / -60, false)
+      : cloneDate(currentStartDate),
     utcDate,
   }
 

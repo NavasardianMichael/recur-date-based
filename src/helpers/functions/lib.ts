@@ -31,7 +31,7 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
       : args.rules
 
   let result = {
-    start: args.numericTimeZone ? setTimeZoneOffset(start, args.numericTimeZone) : start,
+    start: args.numericTimeZone != null ? setTimeZoneOffset(start, args.numericTimeZone) : start,
     rules,
     direction: args.direction ?? DEFAULT_ARGS.direction,
     localeString: args.localeString ?? {},
@@ -47,7 +47,7 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
     result.end = result.start
   } else {
     const end = getEndDate(result)
-    result.end = args.numericTimeZone ? setTimeZoneOffset(end, args.numericTimeZone) : end
+    result.end = args.numericTimeZone != null ? setTimeZoneOffset(end, args.numericTimeZone) : end
   }
 
   return result

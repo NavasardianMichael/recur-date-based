@@ -24,6 +24,7 @@
     "start": "nodemon playground",
     "watch": "tsup --watch",
     "build": "tsup",
+    "test": "node --import tsx --test test/genRecurDateBasedList-step.test.ts test/genRecurDateBasedList-cron.test.ts test/genRecurDateBasedList-edge.test.ts test/formatDate.test.ts test/outputFormats.test.ts",
     "size": "size-limit",
     "format": "cd src && pnpx prettier --write .",
     "cleardeps": "rm -rf node_modules",
@@ -60,6 +61,7 @@
     "size-limit": "^11.2.0",
     "tslib": "^2.8.1",
     "tsup": "^8.4.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
