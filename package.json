@@ -24,7 +24,7 @@
     "start": "nodemon playground",
     "watch": "tsup --watch",
     "build": "tsup",
-    "test": "cross-env NODE_OPTIONS=\"--import tsx\" node --test test/genRecurDateBasedList-step.test.ts test/genRecurDateBasedList-cron.test.ts test/genRecurDateBasedList-edge.test.ts test/formatDate.test.ts test/outputFormats.test.ts",
+    "test": "cross-env NODE_OPTIONS=\"--import tsx\" node --test test/all.test.ts",
     "size": "size-limit",
     "format": "cd src && pnpx prettier --write .",
     "cleardeps": "rm -rf node_modules",
