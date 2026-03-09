@@ -21,7 +21,7 @@ jobs:
           check-latest: ${{ matrix.node == 'lts/*' }}
 
       - name: Install deps and build (with cache)
-        run: yarn
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
