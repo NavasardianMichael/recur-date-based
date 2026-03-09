@@ -64,6 +64,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to badge"
           else
-            git commit -m "chore: update bundle size badge [skip ci]"
+            git commit --no-verify -m "chore: update bundle size badge [skip ci]"
             git push
           fi
