@@ -2,7 +2,7 @@ import { DEFAULT_ARGS } from '../constants/commons'
 import { POSTPONERS } from '../constants/postponers'
 import { TODAY } from '../constants/shared'
 import { VALIDATORS } from '../constants/validators'
-import { T_CoreArgs, T_CoreInitialArgs } from '../types/lib'
+import { T_CoreArgs, T_CoreInitialArgs, T_Rule } from '../types/lib'
 import { isDateObject, setTimeZoneOffset } from './dates'
 
 export function getEndDate({ start, rules, direction, end }: T_CoreArgs): Date {
@@ -11,8 +11,9 @@ export function getEndDate({ start, rules, direction, end }: T_CoreArgs): Date {
   if (isDateObject(end)) return end as Date
 
   const f_End = new Date(start)
+  const rulesList = rules as T_Rule[]
 
-  rules.forEach((rule) => {
+  rulesList.forEach((rule) => {
     POSTPONERS[direction][rule.unit](f_End, rule.portion * (+end || +DEFAULT_ARGS.end))
   })
 
@@ -22,9 +23,16 @@ export function getEndDate({ start, rules, direction, end }: T_CoreArgs): Date {
 export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
   const start = args.start === undefined ? TODAY : new Date(args.start)
 
+  const rules =
+    args.rules === undefined ||
+    (Array.isArray(args.rules) && args.rules.length === 0) ||
+    (typeof args.rules === 'string' && !args.rules.trim())
+      ? DEFAULT_ARGS.rules
+      : args.rules
+
   let result = {
     start: args.numericTimeZone ? setTimeZoneOffset(start, args.numericTimeZone) : start,
-    rules: args.rules?.length ? args.rules : DEFAULT_ARGS.rules,
+    rules,
     direction: args.direction ?? DEFAULT_ARGS.direction,
     localeString: args.localeString ?? {},
     outputFormat: args.outputFormat,
@@ -34,8 +42,13 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
     end: args.end,
   } as T_CoreArgs
 
-  const end = getEndDate(result)
-  result.end = args.numericTimeZone ? setTimeZoneOffset(end, args.numericTimeZone) : end
+  if (typeof rules === 'string' && typeof args.end === 'number') {
+    result.endCount = args.end
+    result.end = result.start
+  } else {
+    const end = getEndDate(result)
+    result.end = args.numericTimeZone ? setTimeZoneOffset(end, args.numericTimeZone) : end
+  }
 
   return result
 }

@@ -1,8 +1,9 @@
 import { isNullish } from '../functions/shared'
 import { isValidDate } from '../functions/dates'
 import { generateErrorPreText, hasFormatOptions } from '../functions/shared'
-import { T_ArgsBase, T_CoreInitialArgs } from '../types/lib'
-import { DIRECTIONS, INTERVAL_UNITS } from './commons'
+import { validateCronString } from '../functions/cron'
+import { T_ArgsBase, T_CoreInitialArgs, T_Rule } from '../types/lib'
+import { DIRECTIONS, ERRORS, INTERVAL_UNITS } from './commons'
 import { OUTPUT_FORMATS } from './formats'
 
 export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => string> = {
@@ -14,7 +15,11 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
   rules: ({ rules, direction }) => {
     if (isNullish(rules)) return ''
 
-    for (const { unit, portion } of rules!) {
+    if (typeof rules === 'string') {
+      return validateCronString(rules)
+    }
+
+    for (const { unit, portion } of rules as T_Rule[]) {
       if (typeof portion !== 'number' || isNaN(portion) || !Number.isInteger(portion)) {
         return `${generateErrorPreText('rules', portion)}. The provided value for *${unit}* must be a number.`
       }
@@ -34,17 +39,22 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
 
     return ''
   },
-  end: ({ end }) => {
-    if (isNullish(end)) return ''
+  end: ({ end, rules }) => {
+    if (typeof rules === 'string') {
+      if (isNullish(end)) {
+        return 'When `rules` is a string (cron), `end` is required: date, string or number (count of occurrences).'
+      }
+    }
 
-    const message = `${generateErrorPreText('end', end)}. The provided value number must be either a string, which can be formatted into a valid date, or a number less than 100_000.`
+    if (isNullish(end)) return ''
 
     if (
       (typeof end !== 'string' && typeof end !== 'number' && !isValidDate(end!)) ||
       (typeof end === 'string' && !isValidDate(end)) ||
-      (typeof end === 'number' && (end > 99_999 || isNaN(end)))
-    )
-      return message
+      (typeof end === 'number' && (end > ERRORS.outputLimit.count || isNaN(end)))
+    ) {
+      return `${generateErrorPreText('end', end)}. The provided value must be either a string, which can be formatted into a valid date, or a number less than 100_000.`
+    }
 
     return ''
   },

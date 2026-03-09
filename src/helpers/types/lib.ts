@@ -37,9 +37,22 @@ export interface T_Error extends Error {
   message: string
 }
 
+export type T_CronString = string
+
+/** Parsed cron: each field is a set of allowed values, or null for "any". */
+export type T_ParsedCron = {
+  minute: Set<number> | null
+  hour: Set<number> | null
+  dayOfMonth: Set<number> | null
+  month: Set<number> | null
+  dayOfWeek: Set<number> | null
+}
+
 export type T_CoreArgs = {
   start: Date
   end: Date
+  /** When rules is a cron string and end was a number, max occurrences to return. */
+  endCount?: number
   rules: T_ArgsBase['rules']
   direction: T_ArgsBase['direction']
   localeString: T_ArgsBase['localeString']
@@ -54,7 +67,8 @@ export type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
 export type T_IntervalUnit = ObjectValuesMap<typeof INTERVAL_UNITS>
 export type T_Direction = ObjectValuesMap<typeof DIRECTIONS>
 
-export type T_Rules = T_Rule[]
+/** Step-based recurrence (array of unit/portion) or a single cron expression string (5 fields). */
+export type T_Rules = T_Rule[] | T_CronString
 
 export type T_Rule = {
   unit: T_IntervalUnit
@@ -64,7 +78,7 @@ export type T_Rule = {
 export type T_PostponeArgs = Pick<T_CoreArgs, 'start' | 'rules'>
 
 /**
- * Union type of every supported output format string. Each value is one of the strings in the OUTPUT_FORMATS array. Use for the outputFormat option or as the second argument to formatDate.
+ * Union type of every supported output format string. Each value is one of the strings in the OUTPUT_FORMATS array (ISO, US/European date-time, month-year, RFC-style, time-only, etc.). Use for the outputFormat option or as the second argument to formatDate.
  *
  * @see OUTPUT_FORMATS
  */
