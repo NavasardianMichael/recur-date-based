@@ -6,7 +6,7 @@ Generate recurring dates and extra props based on them. Function-based, fully-ty
 
 ## Documentation
 
-**Extended docs:** [https://navasardianmichael.github.io/recur-date-based-docs/](https://navasardianmichael.github.io/recur-date-based-docs/)
+**Extended docs:** [https://navasardianmichael.github.io/recur-date-based-docs/](https://recur-date-based-docs.mnavasardian.com)
 
 ---
 
