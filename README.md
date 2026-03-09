@@ -2,11 +2,12 @@
 
 Generate recurring dates and extra props based on them. Function-based, fully-typed, lightweight—no moment or heavy dependencies.
 
-![npm unpacked size](https://img.shields.io/npm/unpacked-size/recur-date-based)
+[![bundle size](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/NavasardianMichael/recur-date-based/main/badge.json)](https://github.com/NavasardianMichael/recur-date-based)
+[![npm unpacked size](https://img.shields.io/npm/unpacked-size/recur-date-based)](https://www.npmjs.com/package/recur-date-based)
 
 ## Documentation
 
-**Extended docs:** [https://navasardianmichael.github.io/recur-date-based-docs/](https://recur-date-based-docs.mnavasardian.com)
+> 📚 **Extended docs:** [recur-date-based-docs.mnavasardian.com](https://recur-date-based-docs.mnavasardian.com)
 
 ---
 
@@ -289,5 +290,6 @@ MIT
 ## Contact
 
 - **Email:** [navasardianmichael@gmail.com](mailto:navasardianmichael@gmail.com)
+- **LinkedIn:** [Michael Navasardyan](https://www.linkedin.com/in/michael-navasardyan)
 - **Project:** [https://github.com/NavasardianMichael/recur-date-based](https://github.com/NavasardianMichael/recur-date-based)
 - **Docs:** [https://navasardianmichael.github.io/recur-date-based-docs/](https://navasardianmichael.github.io/recur-date-based-docs/)
