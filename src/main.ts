@@ -1,8 +1,7 @@
 import { DEFAULT_ARGS, DIRECTIONS, ERRORS } from '@/helpers/constants/commons'
 import { POSTPONERS } from '@/helpers/constants/postponers'
-import { TODAY } from '@/helpers/constants/shared'
 import { getCronOccurrencesOptimized } from '@/helpers/functions/cron'
-import { getDateStr, setTimeZoneOffset } from '@/helpers/functions/dates'
+import { getDateStr } from '@/helpers/functions/dates'
 import { checkInvalidData, processInitialArgs } from '@/helpers/functions/lib'
 import { cloneDate } from '@/helpers/functions/dates'
 import { T_Core, T_CoreArgs, T_CoreReturnType, T_Error, T_PostponeArgs } from '@/helpers/types/lib'
@@ -11,15 +10,18 @@ function buildResultFromDate(
   f_Args: T_CoreArgs,
   currentDate: Date
 ): { currentResult: T_CoreReturnType; callbackArgs: T_CoreReturnType } {
-  const dateStr = getDateStr(currentDate, f_Args)
   const currentStartDate = cloneDate(currentDate)
+  const dateStr = getDateStr(currentDate, f_Args)
+
+  // date: internal UTC value = wall-clock time in target timezone, so toISOString() matches dateStr
+  const date = new Date(currentStartDate.getTime() + f_Args.numericTimeZone * 60 * 60 * 1000)
+
+  // utcDate: raw clone — internal value is actual UTC, always timezone 0
   const utcDate = cloneDate(currentStartDate)
 
   const currentResult: T_CoreReturnType = {
     dateStr,
-    date: f_Args.localeString?.formatOptions?.timeZone
-      ? setTimeZoneOffset(new Date(Date.parse(dateStr)), TODAY.getTimezoneOffset() / -60, false)
-      : cloneDate(currentStartDate),
+    date,
     utcDate,
   }
 

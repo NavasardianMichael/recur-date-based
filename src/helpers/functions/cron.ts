@@ -134,8 +134,8 @@ function dateMatchesCron(date: Date, cron: T_ParsedCron): boolean {
 
 // --- Optimized path: split by multi-value fields, fixed-step or day-step, k-way merge ---
 
-function getSingletonValue(set: Set<number> | null): number | null {
-  if (set === null || set.size !== 1) return null
+function getSingletonValue(set: Set<number> | null): number | undefined {
+  if (set === null || set.size !== 1) return undefined
   return set.values().next().value
 }
 
@@ -153,19 +153,19 @@ function getStepType(parsed: T_ParsedCron): T_CronStepType {
   const monthS = getSingletonValue(parsed.month)
   const dowS = getSingletonValue(parsed.dayOfWeek)
 
-  if (domS !== null && parsed.month === null) return 'dayOfMonth'
-  if (dowS !== null && domS === null && parsed.month === null) return 'week'
-  if (monthS !== null && domS !== null) return 'year'
+  if (domS !== undefined && parsed.month === null) return 'dayOfMonth'
+  if (dowS !== undefined && domS === undefined && parsed.month === null) return 'week'
+  if (monthS !== undefined && domS !== undefined) return 'year'
   if (
-    minS !== null &&
-    hourS !== null &&
+    minS !== undefined &&
+    hourS !== undefined &&
     parsed.dayOfMonth === null &&
     parsed.month === null &&
     parsed.dayOfWeek === null
   ) {
     return 'day'
   }
-  if (minS !== null && parsed.hour === null) return 'minute'
+  if (minS !== undefined && parsed.hour === null) return 'minute'
   return 'day'
 }
 

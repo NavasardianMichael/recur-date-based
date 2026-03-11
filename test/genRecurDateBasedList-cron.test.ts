@@ -11,8 +11,8 @@ describe('genRecurDateBasedList - cron rules', () => {
     })
     assert.ok(list.length >= 4)
     list.forEach((r) => {
-      assert.strictEqual(r.date.getHours(), 9, 'date hour matches cron (date = dateStr moment)')
-      assert.strictEqual(r.date.getMinutes(), 0)
+      assert.strictEqual(r.date.getUTCHours(), 9, 'date hour matches cron (date = dateStr moment)')
+      assert.strictEqual(r.date.getUTCMinutes(), 0)
     })
   })
 
@@ -23,7 +23,7 @@ describe('genRecurDateBasedList - cron rules', () => {
       rules: '0 9 * * 1-5',
     })
     list.forEach((r) => {
-      const dow = r.date.getDay()
+      const dow = r.date.getUTCDay()
       assert.ok(dow >= 1 && dow <= 5, `day ${dow} should be weekday`)
     })
   })
@@ -44,7 +44,7 @@ describe('genRecurDateBasedList - cron rules', () => {
       rules: '*/15 * * * *',
     })
     assert.ok(list.length >= 4)
-    list.forEach((r) => assert.strictEqual(r.date.getMinutes() % 15, 0))
+    list.forEach((r) => assert.strictEqual(r.date.getUTCMinutes() % 15, 0))
   })
 
   it('cron: 15th of every month (0 9 15 * *) - day-of-month step, day-by-day iteration', () => {
@@ -62,10 +62,10 @@ describe('genRecurDateBasedList - cron rules', () => {
       { month: 4, day: 15 },
     ]
     list.forEach((r, i) => {
-      assert.strictEqual(r.date.getDate(), expected[i].day, `occurrence ${i} should be on 15th`)
-      assert.strictEqual(r.date.getMonth(), expected[i].month, `occurrence ${i} should be correct month`)
-      assert.strictEqual(r.date.getHours(), 9, 'date matches dateStr (same moment)')
-      assert.strictEqual(r.date.getMinutes(), 0)
+      assert.strictEqual(r.date.getUTCDate(), expected[i].day, `occurrence ${i} should be on 15th`)
+      assert.strictEqual(r.date.getUTCMonth(), expected[i].month, `occurrence ${i} should be correct month`)
+      assert.strictEqual(r.date.getUTCHours(), 9, 'date matches dateStr (same moment)')
+      assert.strictEqual(r.date.getUTCMinutes(), 0)
     })
   })
 })

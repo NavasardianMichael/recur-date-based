@@ -66,12 +66,17 @@ const INTL_FORMAT_CACHE = new Map<
   }
 >()
 
-function getIntlFormatters(locale: string, useUtc: boolean) {
-  const key = `${locale}\0${useUtc}`
+function getTzForOffset(offset: number): string {
+  return offset === 0 ? 'UTC' : `Etc/GMT${offset > 0 ? '-' : '+'}${Math.abs(offset)}`
+}
+
+function getIntlFormatters(locale: string, useUtc: boolean, tzOffset?: number) {
+  const tz = tzOffset !== undefined ? getTzForOffset(tzOffset) : useUtc ? 'UTC' : ''
+  const key = `${locale}\0${tz}`
   let cached = INTL_FORMAT_CACHE.get(key)
   if (!cached) {
     if (INTL_FORMAT_CACHE.size >= MAX_INTL_CACHE_SIZE) INTL_FORMAT_CACHE.clear()
-    const intlOpts = useUtc ? { timeZone: 'UTC' as const } : {}
+    const intlOpts = tz ? { timeZone: tz as 'UTC' } : {}
     cached = {
       monthShort: new Intl.DateTimeFormat(locale, { month: 'short', ...intlOpts }),
       monthLong: new Intl.DateTimeFormat(locale, { month: 'long', ...intlOpts }),
@@ -83,7 +88,11 @@ function getIntlFormatters(locale: string, useUtc: boolean) {
   return cached
 }
 
-function getTimezoneOffsetString(date: Date): string {
+function getTimezoneOffsetString(date: Date, tzOffset?: number): string {
+  if (tzOffset !== undefined) {
+    const sign = tzOffset >= 0 ? '+' : '-'
+    return `${sign}${pad(Math.abs(tzOffset))}:00`
+  }
   const offsetMin = -date.getTimezoneOffset()
   const sign = offsetMin >= 0 ? '+' : '-'
   const absMin = Math.abs(offsetMin)
@@ -95,21 +104,28 @@ function getTimezoneOffsetString(date: Date): string {
 /**
  * Formats a date using a supported output format string from {@link OUTPUT_FORMATS}.
  *
- * **Tokens (all uppercase):** YYYY/YY (year), MM/M (month), DD/D (day), HH (hour; 12h when format contains ` A`), MM in time context (minutes), SS (seconds), SSS (milliseconds), A (AM/PM), EEE/EEEE (weekday short/long), MMM/MMMM (month short/long), DDD (day of year), Z (timezone offset e.g. +00:00). Uses local time; use result’s utcDate for UTC. Month and weekday names use the given locale.
+ * **Tokens (all uppercase):** YYYY/YY (year), MM/M (month), DD/D (day), HH (hour; 12h when format contains ` A`), MM in time context (minutes), SS (seconds), SSS (milliseconds), A (AM/PM), EEE/EEEE (weekday short/long), MMM/MMMM (month short/long), DDD (day of year), Z (timezone offset e.g. +00:00). Uses local time; use result's utcDate for UTC. Month and weekday names use the given locale.
  *
  * @param date - The Date instance to format.
  * @param format - One of the strings in {@link OUTPUT_FORMATS} (e.g. `'YYYY-MM-DD'`, `'YYYY-MM-DD HH:MM'`, `'MM/DD/YYYY HH:MM:SS A'`, `'DD MMM YYYY HH:MM:SS'`, `'MMMM YYYY'`).
  * @param locale - BCP 47 locale string for month and weekday names (default `'en-US'`).
  * @returns The formatted date string with all tokens replaced.
  */
-export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, locale: string = 'en-US'): string {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-  const day = date.getDate()
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-  const seconds = date.getSeconds()
-  const ms = date.getMilliseconds()
+export function formatDateByOutputFormat(
+  date: Date,
+  format: T_OutputFormat,
+  locale: string = 'en-US',
+  tzOffset?: number
+): string {
+  const viewDate = tzOffset !== undefined ? new Date(date.getTime() + tzOffset * 60 * 60 * 1000) : date
+  const useTz = tzOffset !== undefined
+  const year = useTz ? viewDate.getUTCFullYear() : date.getFullYear()
+  const month = useTz ? viewDate.getUTCMonth() : date.getMonth()
+  const day = useTz ? viewDate.getUTCDate() : date.getDate()
+  const hours = useTz ? viewDate.getUTCHours() : date.getHours()
+  const minutes = useTz ? viewDate.getUTCMinutes() : date.getMinutes()
+  const seconds = useTz ? viewDate.getUTCSeconds() : date.getSeconds()
+  const ms = useTz ? viewDate.getUTCMilliseconds() : date.getMilliseconds()
 
   const use12h = format.includes(' A')
   const hour24 = hours
@@ -121,14 +137,14 @@ export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, loc
     monthLong: monthLongFmt,
     weekdayLong: weekdayLongFmt,
     weekdayShort: weekdayShortFmt,
-  } = getIntlFormatters(locale, false)
+  } = getIntlFormatters(locale, false, tzOffset)
   const monthShort = monthShortFmt.format(date)
   const monthLong = monthLongFmt.format(date)
   const weekdayLong = weekdayLongFmt.format(date)
   const weekdayShort = weekdayShortFmt.format(date)
 
-  const dayOfYear = getDayOfYear(date, false)
-  const tzStr = getTimezoneOffsetString(date)
+  const dayOfYear = getDayOfYear(viewDate, useTz)
+  const tzStr = getTimezoneOffsetString(date, tzOffset)
   const monthPadded = pad(month + 1)
   const dayPadded = pad(day)
 
@@ -175,12 +191,35 @@ export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, loc
 }
 
 export function getDateStr(currentDate: Date, f_Args: T_CoreArgs): string {
+  const f = f_Args as T_CoreArgs & { numericTimeZoneExplicit?: boolean }
+  const tzOffset = f.numericTimeZoneExplicit ? f.numericTimeZone : undefined
   const outputLocale = getOutputLocale(f_Args.localeString)
   if (f_Args.outputFormat) {
-    return formatDateByOutputFormat(currentDate, f_Args.outputFormat, outputLocale)
+    return formatDateByOutputFormat(currentDate, f_Args.outputFormat, outputLocale, tzOffset)
   }
   if (f_Args.localeString?.lang != null || hasFormatOptions(f_Args.localeString)) {
+    if (tzOffset !== undefined) {
+      const tzStr = getTzForOffset(tzOffset)
+      const opts = { ...f_Args.localeString!.formatOptions, timeZone: tzStr as 'UTC' }
+      return currentDate.toLocaleString(f_Args.localeString!.lang, opts)
+    }
     return currentDate.toLocaleString(f_Args.localeString!.lang, f_Args.localeString!.formatOptions)
+  }
+  if (tzOffset !== undefined) {
+    const viewDate = new Date(currentDate.getTime() + tzOffset * 60 * 60 * 1000)
+    return (
+      pad(viewDate.getUTCFullYear()) +
+      '-' +
+      pad(viewDate.getUTCMonth() + 1) +
+      '-' +
+      pad(viewDate.getUTCDate()) +
+      'T' +
+      pad(viewDate.getUTCHours()) +
+      ':' +
+      pad(viewDate.getUTCMinutes()) +
+      ':' +
+      pad(viewDate.getUTCSeconds())
+    )
   }
   return toAdjustedTimezoneISOString(currentDate)
 }

@@ -97,7 +97,7 @@ describe('genRecurDateBasedList - step-based rules', () => {
       filter: ({ date }) => date.getDate() % 2 === 1,
     })
     assert.ok(list.length < 10)
-    list.forEach((r) => assert.strictEqual(r.date.getDate() % 2, 1))
+    list.forEach((r) => assert.strictEqual(r.date.getUTCDate() % 2, 1))
   })
 
   it('extend: add custom properties', () => {

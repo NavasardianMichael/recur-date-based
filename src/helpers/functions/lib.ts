@@ -3,7 +3,7 @@ import { POSTPONERS } from '@/helpers/constants/postponers'
 import { TODAY } from '@/helpers/constants/shared'
 import { VALIDATORS } from '@/helpers/constants/validators'
 import { T_CoreArgs, T_CoreInitialArgs, T_Rule } from '@/helpers/types/lib'
-import { isDateObject, setTimeZoneOffset } from '@/helpers/functions/dates'
+import { isDateObject } from '@/helpers/functions/dates'
 
 export function getEndDate({ start, rules, direction, end }: T_CoreArgs): Date {
   if (typeof end === 'string') return new Date(end)
@@ -31,23 +31,24 @@ export function processInitialArgs(args: T_CoreInitialArgs): T_CoreArgs {
       : args.rules
 
   let result = {
-    start: args.numericTimeZone != null ? setTimeZoneOffset(start, args.numericTimeZone) : start,
+    start,
     rules,
     direction: args.direction ?? DEFAULT_ARGS.direction,
     localeString: args.localeString ?? {},
     outputFormat: args.outputFormat,
     extend: args.extend,
     filter: args.filter,
-    numericTimeZone: args.numericTimeZone ?? TODAY.getTimezoneOffset() / 60,
+    numericTimeZone: args.numericTimeZone ?? TODAY.getTimezoneOffset() / -60,
+    numericTimeZoneExplicit: args.numericTimeZone != null,
     end: args.end,
-  } as T_CoreArgs
+  } as T_CoreArgs & { numericTimeZoneExplicit?: boolean }
 
   if (typeof rules === 'string' && typeof args.end === 'number') {
     result.endCount = args.end
     result.end = result.start
   } else {
     const end = getEndDate(result)
-    result.end = args.numericTimeZone != null ? setTimeZoneOffset(end, args.numericTimeZone) : end
+    result.end = end
   }
 
   return result
