@@ -15,25 +15,36 @@ export const VALIDATORS: Record<keyof T_ArgsBase, (args: T_CoreInitialArgs) => s
   rules: ({ rules, direction }) => {
     if (isNullish(rules)) return ''
 
+    const rulesHint =
+      ' Provide either a valid 5-field cron string (e.g. "0 9 * * *") or an array of T_Rule (import type from the library for the shape) objects.'
+
     if (typeof rules === 'string') {
-      return validateCronString(rules)
+      const msg = validateCronString(rules)
+      return msg ? msg + rulesHint : ''
+    }
+
+    if (!Array.isArray(rules)) {
+      return `${generateErrorPreText('rules', rules)}. *rules* must be a cron string or an array of rule objects (import type T_Rule or T_Rules from the library).`
     }
 
     for (const { unit, portion } of rules as T_Rule[]) {
       if (typeof portion !== 'number' || isNaN(portion) || !Number.isInteger(portion)) {
-        return `${generateErrorPreText('rules', portion)}. The provided value for *${unit}* must be a number.`
+        return `${generateErrorPreText('rules', portion)}. The provided value for *${unit}* must be a number.${rulesHint}`
       }
 
       if (portion <= 0) {
-        return direction === DIRECTIONS.forward
-          ? `${generateErrorPreText('rules', portion)}. The provided value for *portion* must be a positive number. Use only positive portions. Instead, you can set direction property to *backward* in *genRecurDateBasedList* configs.`
-          : `${generateErrorPreText('rules', portion)}. The provided value for *portion* must be a positive number. Use only positive portions. The property *direction* is already set to *backward* in *genRecurDateBasedList* configs.`
+        return (
+          (direction === DIRECTIONS.forward
+            ? `${generateErrorPreText('rules', portion)}. The provided value for *portion* must be a positive number. Use only positive portions. Instead, you can set direction property to *backward* in *genRecurDateBasedList* configs.`
+            : `${generateErrorPreText('rules', portion)}. The provided value for *portion* must be a positive number. Use only positive portions. The property *direction* is already set to *backward* in *genRecurDateBasedList* configs.`) +
+          rulesHint
+        )
       }
 
       if (isNullish(unit)) return ''
 
       if (!Object.keys(INTERVAL_UNITS).includes(unit)) {
-        return `${generateErrorPreText('rules', unit)}. The provided *unit* must be one of the types from the following list: ${Object.keys(INTERVAL_UNITS).join(', ')}.`
+        return `${generateErrorPreText('rules', unit)}. The provided *unit* must be one of the types from the following list: ${Object.keys(INTERVAL_UNITS).join(', ')}.${rulesHint}`
       }
     }
 

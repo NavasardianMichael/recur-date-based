@@ -102,10 +102,7 @@ export function parseCron(cronStr: string): T_ParsedCron | null {
 /**
  * Validate cron string. Returns error message or empty string if valid.
  */
-export function validateCronString(cronStr: unknown): string {
-  if (typeof cronStr !== 'string') {
-    return 'Cron rules must be a non-empty string with 5 fields: minute hour day-of-month month day-of-week.'
-  }
+export function validateCronString(cronStr: string): string {
   const trimmed = cronStr.trim()
   if (!trimmed) {
     return 'Cron rules must be a non-empty string with 5 fields: minute hour day-of-month month day-of-week.'
