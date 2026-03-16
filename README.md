@@ -31,6 +31,7 @@ npm install recur-date-based
 | `INTERVAL_UNITS`        | `{ millisecond, minute, hour, day, week, month, year }`           | Interval unit constants — avoids magic strings    |
 | `T_CoreInitialArgs`     | type                                                              | Input parameters type for `genRecurDateBasedList` |
 | `T_OutputFormat`        | type                                                              | Union of all supported format strings             |
+| `T_IntervalUnit`        | type                                                              | Union of all interval unit strings                |
 | `T_Rule`                | type                                                              | `{ unit: T_IntervalUnit, portion: number }`       |
 
 ---
