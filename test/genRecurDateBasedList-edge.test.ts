@@ -50,8 +50,8 @@ describe('genRecurDateBasedList - edge cases', () => {
     assert.strictEqual(r.dateStr.slice(0, 10), '2024-01-15', 'dateStr date part')
     const [, timePart] = r.dateStr.split(' ')
     const [h, m] = timePart.split(':').map(Number)
-    assert.strictEqual(h, r.date.getHours(), 'dateStr hour matches date (same moment)')
-    assert.strictEqual(m, r.date.getMinutes(), 'dateStr minute matches date (same moment)')
+    assert.strictEqual(h, r.date.getHours(), 'dateStr hour matches date')
+    assert.strictEqual(m, r.date.getMinutes(), 'dateStr minute matches date')
     assert.strictEqual(h, inputAsLocal.getHours(), 'dateStr in user local timezone')
     assert.strictEqual(m, inputAsLocal.getMinutes(), 'dateStr minute in user local')
     assert.ok(r.utcDate.toISOString().endsWith('Z'), 'utcDate in UTC (0 offset)')
@@ -134,5 +134,27 @@ describe('genRecurDateBasedList - edge cases', () => {
       filter: () => false,
     })
     assert.strictEqual(list.length, 0)
+  })
+
+  it('direction backward: dates decrement, dateStr/date/utcDate all consistent', () => {
+    const list = genRecurDateBasedList({
+      start: '2024-01-10T14:00:00',
+      end: '2024-01-07T00:00:00',
+      rules: [{ unit: 'day', portion: 1 }],
+      direction: 'backward',
+    })
+    assert.strictEqual(list.length, 4)
+    assert.strictEqual(list[0].dateStr, '2024-01-10T14:00:00')
+    assert.strictEqual(list[1].dateStr, '2024-01-09T14:00:00')
+    assert.strictEqual(list[2].dateStr, '2024-01-08T14:00:00')
+    assert.strictEqual(list[3].dateStr, '2024-01-07T14:00:00')
+    list.forEach((r, i) => {
+      assert.strictEqual(r.date.getHours(), 14, `item ${i}: getHours() = 14`)
+      assert.strictEqual(r.date.getDate(), 10 - i, `item ${i}: day decrements`)
+    })
+    // dates are in descending order
+    for (let i = 1; i < list.length; i++) {
+      assert.ok(list[i - 1].date > list[i].date, `item ${i - 1} > item ${i}`)
+    }
   })
 })

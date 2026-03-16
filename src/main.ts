@@ -1,10 +1,8 @@
 import { DEFAULT_ARGS, DIRECTIONS, ERRORS } from '@/helpers/constants/commons'
 import { POSTPONERS } from '@/helpers/constants/postponers'
-import { TODAY } from '@/helpers/constants/shared'
 import { getCronOccurrencesOptimized } from '@/helpers/functions/cron'
-import { getDateStr, setTimeZoneOffset } from '@/helpers/functions/dates'
+import { cloneDate, getDateStr } from '@/helpers/functions/dates'
 import { checkInvalidData, processInitialArgs } from '@/helpers/functions/lib'
-import { cloneDate } from '@/helpers/functions/dates'
 import { T_Core, T_CoreArgs, T_CoreReturnType, T_Error, T_PostponeArgs } from '@/helpers/types/lib'
 
 function buildResultFromDate(
@@ -12,21 +10,24 @@ function buildResultFromDate(
   currentDate: Date
 ): { currentResult: T_CoreReturnType; callbackArgs: T_CoreReturnType } {
   const dateStr = getDateStr(currentDate, f_Args)
-  const currentStartDate = cloneDate(currentDate)
-  const utcDate = cloneDate(currentStartDate)
+  const date = cloneDate(currentDate)
+  const wallMs = Date.UTC(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    currentDate.getHours(),
+    currentDate.getMinutes(),
+    currentDate.getSeconds(),
+    currentDate.getMilliseconds()
+  )
+  const utcDate = new Date(wallMs - f_Args.numericTimeZone * 60 * 60 * 1000)
 
-  const currentResult: T_CoreReturnType = {
-    dateStr,
-    date: f_Args.localeString?.formatOptions?.timeZone
-      ? setTimeZoneOffset(new Date(Date.parse(dateStr)), TODAY.getTimezoneOffset() / -60, false)
-      : cloneDate(currentStartDate),
-    utcDate,
-  }
+  const currentResult: T_CoreReturnType = { dateStr, date, utcDate }
 
   const callbackArgs: T_CoreReturnType = {
-    ...currentResult,
-    date: cloneDate(currentResult.date),
-    utcDate: cloneDate(currentResult.utcDate),
+    dateStr,
+    date: cloneDate(currentDate),
+    utcDate: new Date(utcDate.getTime()),
   }
 
   return { currentResult, callbackArgs }
