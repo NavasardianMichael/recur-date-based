@@ -22,13 +22,16 @@ npm install recur-date-based
 
 ### Exports
 
-| Export                  | Type                                                              | Description                                   |
-| ----------------------- | ----------------------------------------------------------------- | --------------------------------------------- |
-| `genRecurDateBasedList` | `(args?) => T_CoreReturnType[]`                                   | Main function to generate recurring dates     |
-| `formatDate`            | `(date: Date, format: T_OutputFormat, locale?: string) => string` | Format a date using a supported output format |
-| `OUTPUT_FORMATS`        | `readonly string[]`                                               | List of supported format strings              |
-| `T_OutputFormat`        | type                                                              | Union of all supported format strings         |
-| `T_Rules`               | type                                                              | Step-based rules or cron string               |
+| Export                  | Type                                                              | Description                                       |
+| ----------------------- | ----------------------------------------------------------------- | ------------------------------------------------- |
+| `genRecurDateBasedList` | `(args?) => T_CoreReturnType[]`                                   | Main function to generate recurring dates         |
+| `formatDate`            | `(date: Date, format: T_OutputFormat, locale?: string) => string` | Format a date using a supported output format     |
+| `OUTPUT_FORMATS`        | `readonly string[]`                                               | List of supported format strings                  |
+| `DIRECTIONS`            | `{ forward, backward }`                                           | Direction constants — avoids magic strings        |
+| `INTERVAL_UNITS`        | `{ millisecond, minute, hour, day, week, month, year }`           | Interval unit constants — avoids magic strings    |
+| `T_CoreInitialArgs`     | type                                                              | Input parameters type for `genRecurDateBasedList` |
+| `T_OutputFormat`        | type                                                              | Union of all supported format strings             |
+| `T_Rule`                | type                                                              | `{ unit: T_IntervalUnit, portion: number }`       |
 
 ---
 
@@ -95,11 +98,11 @@ genRecurDateBasedList({
 
 Each item has:
 
-| Property  | Type     | Description                                      |
-| --------- | -------- | ------------------------------------------------ |
-| `date`    | `Date`   | Same moment as `dateStr` (local timezone).       |
-| `dateStr` | `string` | Stringified `date` per `outputFormat` or locale. |
-| `utcDate` | `Date`   | Same moment in UTC (use `getUTC*` methods).      |
+| Property  | Type     | Description                                                                              |
+| --------- | -------- | ---------------------------------------------------------------------------------------- |
+| `date`    | `Date`   | Wall-clock date in target timezone. Use normal getters (`getHours()`, `getDay()`, etc.). |
+| `dateStr` | `string` | String representation of `date` per `outputFormat` or locale.                            |
+| `utcDate` | `Date`   | The actual UTC moment (wall-clock minus `numericTimeZone` offset).                       |
 
 Plus any keys from `extend`.
 
@@ -189,14 +192,31 @@ genRecurDateBasedList({
 })
 ```
 
+### Using exported constants (TypeScript)
+
+```ts
+import { genRecurDateBasedList, DIRECTIONS, INTERVAL_UNITS, type T_CoreInitialArgs } from 'recur-date-based'
+
+const args: T_CoreInitialArgs = {
+  start: '2024-01-01',
+  end: 5,
+  rules: [{ unit: INTERVAL_UNITS.day, portion: 1 }],
+  direction: DIRECTIONS.forward,
+}
+
+genRecurDateBasedList(args)
+```
+
 ### Backward with custom timezone
 
 ```ts
+import { genRecurDateBasedList, DIRECTIONS, INTERVAL_UNITS } from 'recur-date-based'
+
 genRecurDateBasedList({
   start: new Date(),
   end: 3,
-  rules: [{ unit: 'day', portion: 2 }],
-  direction: 'backward',
+  rules: [{ unit: INTERVAL_UNITS.day, portion: 2 }],
+  direction: DIRECTIONS.backward,
   numericTimeZone: 3,
   onError: (e) => console.log(e.message),
 })
@@ -250,6 +270,32 @@ All tests are in `test/` and run with `npm test`. Coverage below.
 | localeString with formatOptions.timeZone              | `formatOptions.timeZone`  |
 | multiple units in rules (e.g. 2 days)                 | `portion: 2`              |
 | filter returns false skips iteration                  | All filtered out          |
+| direction backward: dates decrement, consistent props | Backward consistency      |
+
+### `genRecurDateBasedList` – timezone handling
+
+| Test                                                      | Description                                 |
+| --------------------------------------------------------- | ------------------------------------------- |
+| dateStr preserves the input wall-clock time               | String start + TZ: dateStr keeps face value |
+| date.getHours() returns the wall-clock hour from dateStr  | `getHours()` matches dateStr                |
+| utcDate is wall-clock minus numericTimeZone offset        | utcDate = wall-clock − offset               |
+| utcDate with negative timezone                            | Negative TZ (e.g. −5)                       |
+| utcDate with timezone 0 equals wall-clock                 | TZ 0: utcDate = wall-clock                  |
+| date and dateStr agree on all components                  | Year/month/day/hour consistency             |
+| date is in user local timezone (same as new Date(string)) | String start, no TZ                         |
+| numericTimeZone defaults to machine timezone              | Default TZ = `−(getTimezoneOffset()/60)`    |
+| dateStr matches the input face value                      | No TZ: dateStr matches input                |
+| transforms Date to target timezone wall-clock             | Date object start + TZ                      |
+| keeps date in user local timezone unchanged               | Date object start, no TZ                    |
+| TZ+0: utcDate equals wall-clock                           | UTC correctness at +0                       |
+| TZ+5: utcDate is 5 hours behind wall-clock                | UTC correctness at +5                       |
+| TZ−8: utcDate is 8 hours ahead of wall-clock              | UTC correctness at −8                       |
+| TZ+12: utcDate crosses to previous day                    | UTC correctness at +12                      |
+| filter receives date with correct getHours()              | Callback wall-clock values                  |
+| extend receives date with correct getDay()                | Callback wall-clock values                  |
+| extend can access utcDate properly                        | Callback utcDate access                     |
+| all items have same wall-clock time across days           | Multi-day TZ consistency                    |
+| date increments by 1 day correctly                        | Multi-day step correctness                  |
 
 ### `formatDate`
 
