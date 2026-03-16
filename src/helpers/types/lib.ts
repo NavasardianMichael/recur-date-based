@@ -16,6 +16,13 @@ export type T_ArgsBase = {
   onError: (error: T_Error) => unknown
 }
 
+/**
+ * Input configuration object for {@link genRecurDateBasedList}.
+ *
+ * Every property is optional; sensible defaults are applied internally.
+ * Mirrors the parameters table in the documentation and is useful for
+ * annotating reusable configuration objects.
+ */
 export type T_CoreInitialArgs = Partial<T_ArgsBase>
 
 type T_LocaleString = {
@@ -23,6 +30,16 @@ type T_LocaleString = {
   formatOptions?: Intl.DateTimeFormatOptions
 }
 
+/**
+ * Shape of each item returned by {@link genRecurDateBasedList}.
+ *
+ * Always contains `date` (local), `utcDate` (UTC equivalent) and `dateStr`
+ * (formatted string). When the generic parameter `T` is supplied (inferred
+ * from the `extend` option), those extra properties are intersected in,
+ * giving you a fully typed return value.
+ *
+ * @typeParam T - Additional properties defined by the `extend` callbacks.
+ */
 export type T_CoreReturnType<T = {}> = {
   date: Date
   utcDate: Date
@@ -66,12 +83,29 @@ export type T_Core = <E extends Record<string, unknown> = {}>(
   }
 ) => T_CoreReturnType<E>[]
 
+/**
+ * Union of all supported interval unit strings (`'millisecond' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'`).
+ *
+ * Derived from the {@link INTERVAL_UNITS} constant.
+ */
 export type T_IntervalUnit = ObjectValuesMap<typeof INTERVAL_UNITS>
+
+/**
+ * Union of supported direction strings (`'forward' | 'backward'`).
+ *
+ * Derived from the {@link DIRECTIONS} constant.
+ */
 export type T_Direction = ObjectValuesMap<typeof DIRECTIONS>
 
 /** Step-based recurrence (array of unit/portion) or a single cron expression string (5 fields). */
 export type T_Rules = T_Rule[] | T_CronString
 
+/**
+ * A single recurrence rule describing how far to step on each iteration.
+ *
+ * @property unit - The time unit to step by (e.g. `'day'`, `'week'`, `'month'`).
+ * @property portion - How many of that unit to advance per step.
+ */
 export type T_Rule = {
   unit: T_IntervalUnit
   portion: number

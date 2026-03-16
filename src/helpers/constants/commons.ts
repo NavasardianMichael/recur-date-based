@@ -7,6 +7,15 @@ export const ERRORS = {
   },
 }
 
+/**
+ * Readonly map of supported recurrence interval units.
+ *
+ * Use as the `unit` value inside a rule object passed to `genRecurDateBasedList`.
+ *
+ * Keys / values: `millisecond`, `minute`, `hour`, `day`, `week`, `month`, `year`.
+ *
+ * @constant
+ */
 export const INTERVAL_UNITS = {
   millisecond: 'millisecond',
   minute: 'minute',
@@ -17,6 +26,14 @@ export const INTERVAL_UNITS = {
   year: 'year',
 } as const
 
+/**
+ * Readonly map of supported iteration directions.
+ *
+ * - `DIRECTIONS.forward` — iterate from `start` toward the future.
+ * - `DIRECTIONS.backward` — iterate from `start` toward the past.
+ *
+ * @constant
+ */
 export const DIRECTIONS = {
   backward: 'backward',
   forward: 'forward',

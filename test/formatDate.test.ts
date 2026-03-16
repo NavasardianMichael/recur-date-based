@@ -129,6 +129,72 @@ describe('formatDate', () => {
       const out = formatDate(d, 'D MMMM YYYY', 'en-US')
       assert.ok(out.includes('January'))
     })
+
+    it('MMMM DD, YYYY HH:MM', () => {
+      const out = formatDate(d, 'MMMM DD, YYYY HH:MM', 'en-US')
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('12:00'))
+    })
+
+    it('MMMM DD, YYYY HH:MM:SS', () => {
+      const out = formatDate(d, 'MMMM DD, YYYY HH:MM:SS', 'en-US')
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('12:00:00'))
+    })
+
+    it('MMMM DD, YYYY HH:MM A', () => {
+      const out = formatDate(d, 'MMMM DD, YYYY HH:MM A', 'en-US')
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('MMMM DD, YYYY HH:MM:SS A', () => {
+      const out = formatDate(d, 'MMMM DD, YYYY HH:MM:SS A', 'en-US')
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('DD MMMM YYYY HH:MM', () => {
+      const out = formatDate(d, 'DD MMMM YYYY HH:MM', 'en-US')
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('12:00'))
+    })
+
+    it('DD MMMM YYYY HH:MM:SS', () => {
+      const out = formatDate(d, 'DD MMMM YYYY HH:MM:SS', 'en-US')
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('12:00:00'))
+    })
+
+    it('DD MMMM YYYY HH:MM A', () => {
+      const out = formatDate(d, 'DD MMMM YYYY HH:MM A', 'en-US')
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('DD MMMM YYYY HH:MM:SS A', () => {
+      const out = formatDate(d, 'DD MMMM YYYY HH:MM:SS A', 'en-US')
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('DD MMM YYYY HH:MM', () => {
+      const out = formatDate(d, 'DD MMM YYYY HH:MM', 'en-US')
+      assert.ok(out.includes('Jan'))
+      assert.ok(out.includes('12:00'))
+    })
+
+    it('DD MMM YYYY HH:MM A', () => {
+      const out = formatDate(d, 'DD MMM YYYY HH:MM A', 'en-US')
+      assert.ok(out.includes('Jan'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('DD MMM YYYY HH:MM:SS A', () => {
+      const out = formatDate(d, 'DD MMM YYYY HH:MM:SS A', 'en-US')
+      assert.ok(out.includes('Jan'))
+      assert.ok(out.includes('PM'))
+    })
   })
 
   // ── Weekday formats ───────────────────────────────────────────────
@@ -156,6 +222,63 @@ describe('formatDate', () => {
     it('EEEE, D MMM YYYY', () => {
       const out = formatDate(monday, 'EEEE, D MMM YYYY', 'en-US')
       assert.ok(out.includes('Monday'))
+    })
+
+    it('EEEE, MMMM DD, YYYY HH:MM', () => {
+      const out = formatDate(monday, 'EEEE, MMMM DD, YYYY HH:MM', 'en-US')
+      assert.ok(out.includes('Monday'), `expected "Monday" in "${out}"`)
+      assert.ok(out.includes('January'))
+      assert.ok(out.includes('12:00'))
+    })
+
+    it('EEEE, MMMM DD, YYYY HH:MM:SS', () => {
+      const out = formatDate(monday, 'EEEE, MMMM DD, YYYY HH:MM:SS', 'en-US')
+      assert.ok(out.includes('Monday'))
+      assert.ok(out.includes('12:00:00'))
+    })
+
+    it('EEEE, MMMM DD, YYYY HH:MM A', () => {
+      const out = formatDate(monday, 'EEEE, MMMM DD, YYYY HH:MM A', 'en-US')
+      assert.ok(out.includes('Monday'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('EEEE, MMMM DD, YYYY HH:MM:SS A', () => {
+      const out = formatDate(monday, 'EEEE, MMMM DD, YYYY HH:MM:SS A', 'en-US')
+      assert.ok(out.includes('Monday'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('EEEE, DD MMM YYYY HH:MM', () => {
+      const out = formatDate(monday, 'EEEE, DD MMM YYYY HH:MM', 'en-US')
+      assert.ok(out.includes('Monday'))
+      assert.ok(out.includes('Jan'))
+      assert.ok(out.includes('12:00'))
+    })
+
+    it('EEEE, DD MMM YYYY HH:MM:SS', () => {
+      const out = formatDate(monday, 'EEEE, DD MMM YYYY HH:MM:SS', 'en-US')
+      assert.ok(out.includes('Monday'))
+      assert.ok(out.includes('12:00:00'))
+    })
+
+    it('EEEE, DD MMM YYYY HH:MM A', () => {
+      const out = formatDate(monday, 'EEEE, DD MMM YYYY HH:MM A', 'en-US')
+      assert.ok(out.includes('Monday'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('EEEE, DD MMM YYYY HH:MM:SS A', () => {
+      const out = formatDate(monday, 'EEEE, DD MMM YYYY HH:MM:SS A', 'en-US')
+      assert.ok(out.includes('Monday'))
+      assert.ok(out.includes('PM'))
+    })
+
+    it('EEEE, D MMM YYYY HH:MM:SS', () => {
+      const d5 = new Date('2024-01-05T09:30:45')
+      const out = formatDate(d5, 'EEEE, D MMM YYYY HH:MM:SS', 'en-US')
+      assert.ok(out.includes('Friday'))
+      assert.ok(out.includes('09:30:45'))
     })
 
     it('EEE, DD MMM YYYY HH:MM:SS', () => {
@@ -236,6 +359,54 @@ describe('formatDate', () => {
 
     it('DD-MM-YYYY HH:MM', () => assert.strictEqual(formatDate(d, 'DD-MM-YYYY HH:MM'), '15-03-2024 09:30'))
     it('DD-MM-YYYY HH:MM:SS', () => assert.strictEqual(formatDate(d, 'DD-MM-YYYY HH:MM:SS'), '15-03-2024 09:30:45'))
+    it('DD-MM-YYYY HH:MM A', () => assert.strictEqual(formatDate(d, 'DD-MM-YYYY HH:MM A'), '15-03-2024 09:30 AM'))
+    it('DD-MM-YYYY HH:MM:SS A', () =>
+      assert.strictEqual(formatDate(d, 'DD-MM-YYYY HH:MM:SS A'), '15-03-2024 09:30:45 AM'))
+
+    it('MM-DD-YYYY HH:MM A', () => assert.strictEqual(formatDate(d, 'MM-DD-YYYY HH:MM A'), '03-15-2024 09:30 AM'))
+    it('MM-DD-YYYY HH:MM:SS A', () =>
+      assert.strictEqual(formatDate(d, 'MM-DD-YYYY HH:MM:SS A'), '03-15-2024 09:30:45 AM'))
+
+    it('MM/DD/YYYY HH:MM:SS A', () =>
+      assert.strictEqual(formatDate(d, 'MM/DD/YYYY HH:MM:SS A'), '03/15/2024 09:30:45 AM'))
+
+    it('M/DD/YYYY HH:MM', () => assert.strictEqual(formatDate(d, 'M/DD/YYYY HH:MM'), '3/15/2024 09:30'))
+    it('M/DD/YYYY HH:MM:SS', () => assert.strictEqual(formatDate(d, 'M/DD/YYYY HH:MM:SS'), '3/15/2024 09:30:45'))
+    it('M/D/YYYY HH:MM', () => {
+      const d2 = new Date('2024-03-05T09:30:45')
+      assert.strictEqual(formatDate(d2, 'M/D/YYYY HH:MM'), '3/5/2024 09:30')
+    })
+
+    it('DD/M/YYYY HH:MM', () => assert.strictEqual(formatDate(d, 'DD/M/YYYY HH:MM'), '15/3/2024 09:30'))
+    it('DD/M/YYYY HH:MM:SS', () => assert.strictEqual(formatDate(d, 'DD/M/YYYY HH:MM:SS'), '15/3/2024 09:30:45'))
+    it('D/MM/YYYY HH:MM:SS A', () =>
+      assert.strictEqual(formatDate(d, 'D/MM/YYYY HH:MM:SS A'), '15/03/2024 09:30:45 AM'))
+
+    it('YYYY/MM/DD HH:MM', () => assert.strictEqual(formatDate(d, 'YYYY/MM/DD HH:MM'), '2024/03/15 09:30'))
+    it('YYYY/MM/DD HH:MM:SS', () => assert.strictEqual(formatDate(d, 'YYYY/MM/DD HH:MM:SS'), '2024/03/15 09:30:45'))
+    it('YYYY/MM/D HH:MM', () => assert.strictEqual(formatDate(d, 'YYYY/MM/D HH:MM'), '2024/03/15 09:30'))
+
+    it('YYYY-MM-D HH:MM', () => {
+      const d2 = new Date('2024-03-05T09:30:45')
+      assert.strictEqual(formatDate(d2, 'YYYY-MM-D HH:MM'), '2024-03-5 09:30')
+    })
+    it('YYYY-MM-D HH:MM:SS', () => {
+      const d2 = new Date('2024-03-05T09:30:45')
+      assert.strictEqual(formatDate(d2, 'YYYY-MM-D HH:MM:SS'), '2024-03-5 09:30:45')
+    })
+
+    it('DD.MM.YY HH:MM', () => assert.strictEqual(formatDate(d, 'DD.MM.YY HH:MM'), '15.03.24 09:30'))
+    it('DD.MM.YY HH:MM:SS', () => assert.strictEqual(formatDate(d, 'DD.MM.YY HH:MM:SS'), '15.03.24 09:30:45'))
+    it('YYYY.MM.D HH:MM', () => assert.strictEqual(formatDate(d, 'YYYY.MM.D HH:MM'), '2024.03.15 09:30'))
+    it('D.M.YYYY HH:MM', () => assert.strictEqual(formatDate(d, 'D.M.YYYY HH:MM'), '15.3.2024 09:30'))
+    it('D.M.YYYY HH:MM:SS', () => assert.strictEqual(formatDate(d, 'D.M.YYYY HH:MM:SS'), '15.3.2024 09:30:45'))
+
+    it('YY/MM/DD HH:MM', () => assert.strictEqual(formatDate(d, 'YY/MM/DD HH:MM'), '24/03/15 09:30'))
+    it('YY/MM/DD HH:MM:SS', () => assert.strictEqual(formatDate(d, 'YY/MM/DD HH:MM:SS'), '24/03/15 09:30:45'))
+    it('YY-MM-DD HH:MM', () => assert.strictEqual(formatDate(d, 'YY-MM-DD HH:MM'), '24-03-15 09:30'))
+    it('MM/DD/YY HH:MM', () => assert.strictEqual(formatDate(d, 'MM/DD/YY HH:MM'), '03/15/24 09:30'))
+    it('DD/MM/YY HH:MM', () => assert.strictEqual(formatDate(d, 'DD/MM/YY HH:MM'), '15/03/24 09:30'))
+    it('DD/MM/YY HH:MM:SS', () => assert.strictEqual(formatDate(d, 'DD/MM/YY HH:MM:SS'), '15/03/24 09:30:45'))
 
     it('DD.MM.YYYY HH:MM', () => assert.strictEqual(formatDate(d, 'DD.MM.YYYY HH:MM'), '15.03.2024 09:30'))
     it('DD.MM.YYYY HH:MM:SS', () => assert.strictEqual(formatDate(d, 'DD.MM.YYYY HH:MM:SS'), '15.03.2024 09:30:45'))

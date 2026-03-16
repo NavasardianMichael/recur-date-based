@@ -43,6 +43,45 @@ describe('OUTPUT_FORMATS', () => {
     assert.ok(OUTPUT_FORMATS.includes('EEE, DD MMM YYYY HH:MM:SS'))
   })
 
+  it('includes EEEE long weekday + time formats', () => {
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, MMMM DD, YYYY HH:MM'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, MMMM DD, YYYY HH:MM:SS'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, MMMM DD, YYYY HH:MM A'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, MMMM DD, YYYY HH:MM:SS A'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, MMMM D, YYYY HH:MM'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, MMMM D, YYYY HH:MM:SS'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, MMMM D, YYYY HH:MM A'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, MMMM D, YYYY HH:MM:SS A'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, DD MMM YYYY HH:MM'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, DD MMM YYYY HH:MM:SS'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, DD MMM YYYY HH:MM A'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, DD MMM YYYY HH:MM:SS A'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, D MMM YYYY HH:MM'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, D MMM YYYY HH:MM:SS'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, D MMM YYYY HH:MM A'))
+    assert.ok(OUTPUT_FORMATS.includes('EEEE, D MMM YYYY HH:MM:SS A'))
+  })
+
+  it('includes MMMM and DD MMMM date+time formats', () => {
+    assert.ok(OUTPUT_FORMATS.includes('MMMM DD, YYYY HH:MM'))
+    assert.ok(OUTPUT_FORMATS.includes('MMMM DD, YYYY HH:MM:SS'))
+    assert.ok(OUTPUT_FORMATS.includes('MMMM DD, YYYY HH:MM A'))
+    assert.ok(OUTPUT_FORMATS.includes('MMMM DD, YYYY HH:MM:SS A'))
+    assert.ok(OUTPUT_FORMATS.includes('DD MMMM YYYY HH:MM'))
+    assert.ok(OUTPUT_FORMATS.includes('DD MMMM YYYY HH:MM:SS'))
+    assert.ok(OUTPUT_FORMATS.includes('DD MMMM YYYY HH:MM A'))
+    assert.ok(OUTPUT_FORMATS.includes('DD MMMM YYYY HH:MM:SS A'))
+  })
+
+  it('includes DD MMM YYYY HH:MM and AM/PM variants', () => {
+    assert.ok(OUTPUT_FORMATS.includes('DD MMM YYYY HH:MM'))
+    assert.ok(OUTPUT_FORMATS.includes('D MMM YYYY HH:MM'))
+    assert.ok(OUTPUT_FORMATS.includes('DD MMM YYYY HH:MM A'))
+    assert.ok(OUTPUT_FORMATS.includes('D MMM YYYY HH:MM A'))
+    assert.ok(OUTPUT_FORMATS.includes('DD MMM YYYY HH:MM:SS A'))
+    assert.ok(OUTPUT_FORMATS.includes('D MMM YYYY HH:MM:SS A'))
+  })
+
   it('includes time-only formats', () => {
     assert.ok(OUTPUT_FORMATS.includes('HH:MM'))
     assert.ok(OUTPUT_FORMATS.includes('HH:MM:SS'))

@@ -22,17 +22,21 @@ npm install recur-date-based
 
 ### Exports
 
-| Export                  | Type                                                              | Description                                       |
-| ----------------------- | ----------------------------------------------------------------- | ------------------------------------------------- |
-| `genRecurDateBasedList` | `(args?) => T_CoreReturnType[]`                                   | Main function to generate recurring dates         |
-| `formatDate`            | `(date: Date, format: T_OutputFormat, locale?: string) => string` | Format a date using a supported output format     |
-| `OUTPUT_FORMATS`        | `readonly string[]`                                               | List of supported format strings                  |
-| `DIRECTIONS`            | `{ forward, backward }`                                           | Direction constants — avoids magic strings        |
-| `INTERVAL_UNITS`        | `{ millisecond, minute, hour, day, week, month, year }`           | Interval unit constants — avoids magic strings    |
-| `T_CoreInitialArgs`     | type                                                              | Input parameters type for `genRecurDateBasedList` |
-| `T_OutputFormat`        | type                                                              | Union of all supported format strings             |
-| `T_IntervalUnit`        | type                                                              | Union of all interval unit strings                |
-| `T_Rule`                | type                                                              | `{ unit: T_IntervalUnit, portion: number }`       |
+All exported functions, constants, and types are documented with **JSDoc** in the source, so you get inline descriptions and type hints in your editor.
+
+| Export                  | Type                                                              | Description                                            |
+| ----------------------- | ----------------------------------------------------------------- | ------------------------------------------------------ |
+| `genRecurDateBasedList` | `<T>(args?) => T_CoreReturnType<T>[]`                             | Main function to generate recurring dates              |
+| `formatDate`            | `(date: Date, format: T_OutputFormat, locale?: string) => string` | Format a date using a supported output format          |
+| `OUTPUT_FORMATS`        | `readonly T_OutputFormat[]`                                       | Array of all supported format strings                  |
+| `DIRECTIONS`            | `{ forward, backward }`                                           | Direction constants — avoids magic strings             |
+| `INTERVAL_UNITS`        | `{ millisecond, minute, hour, day, week, month, year }`           | Interval unit constants — avoids magic strings         |
+| `T_CoreInitialArgs`     | type                                                              | Input parameters type for `genRecurDateBasedList`      |
+| `T_CoreReturnType<T>`   | type                                                              | Return item type: `{ date, utcDate, dateStr } & T`     |
+| `T_OutputFormat`        | type                                                              | Union of all supported format strings                  |
+| `T_IntervalUnit`        | type                                                              | Union of all interval unit strings                     |
+| `T_Direction`           | type                                                              | Union of direction strings (`'forward' \| 'backward'`) |
+| `T_Rule`                | type                                                              | `{ unit: T_IntervalUnit, portion: number }`            |
 
 ---
 
@@ -42,18 +46,18 @@ Generates an array of recurring date objects from `start` to `end`, stepping by 
 
 #### Parameters
 
-| Property          | Type                                                                          | Default                         | Description                                                          |
-| ----------------- | ----------------------------------------------------------------------------- | ------------------------------- | -------------------------------------------------------------------- |
-| `start`           | `string \| Date`                                                              | today                           | Start date. Can be omitted for "now".                                |
-| `end`             | `number \| string \| Date`                                                    | `10`                            | End: number of occurrences, or date/string. Max 99_999 when numeric. |
-| `rules`           | `T_Rule[] \| string`                                                          | `[{ unit: 'day', portion: 1 }]` | Step-based rules or cron string (5 fields).                          |
-| `direction`       | `'forward' \| 'backward'`                                                     | `'forward'`                     | Whether dates repeat forward or backward.                            |
-| `outputFormat`    | `T_OutputFormat`                                                              | —                               | Format string for `dateStr`. Use one of `OUTPUT_FORMATS`.            |
-| `localeString`    | `{ lang?: Intl.LocalesArgument; formatOptions?: Intl.DateTimeFormatOptions }` | `{}`                            | Locale and format options for `toLocaleString`.                      |
-| `numericTimeZone` | `number`                                                                      | user's timezone                 | Timezone offset (-12 to 12). Use `0` for UTC.                        |
-| `filter`          | `(args: { date, utcDate, dateStr }) => boolean`                               | —                               | Exclude if callback returns `false`.                                 |
-| `extend`          | `Record<string, (args) => unknown>`                                           | `{}`                            | Add custom properties per occurrence.                                |
-| `onError`         | `(error: Error) => unknown`                                                   | —                               | Handle errors without throwing.                                      |
+| Property          | Type                                                                          | Default                         | Description                                                                                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `start`           | `string \| Date`                                                              | today                           | Start date. Can be omitted for "now".                                                                                                                           |
+| `end`             | `number \| string \| Date`                                                    | `10`                            | End: number of occurrences, or date/string. Max 99_999 when numeric.                                                                                            |
+| `rules`           | `T_Rule[] \| string`                                                          | `[{ unit: 'day', portion: 1 }]` | Step-based rules or cron string (5 fields).                                                                                                                     |
+| `direction`       | `'forward' \| 'backward'`                                                     | `'forward'`                     | Whether dates repeat forward or backward.                                                                                                                       |
+| `outputFormat`    | `T_OutputFormat`                                                              | —                               | Format string for `dateStr`. Use one of `OUTPUT_FORMATS`. When both `outputFormat` and `localeString` are omitted, `dateStr` defaults to `YYYY-MM-DDTHH:mm:ss`. |
+| `localeString`    | `{ lang?: Intl.LocalesArgument; formatOptions?: Intl.DateTimeFormatOptions }` | `{}`                            | Locale and format options for `toLocaleString`.                                                                                                                 |
+| `numericTimeZone` | `number`                                                                      | user's timezone                 | Timezone offset (-12 to 12). Use `0` for UTC.                                                                                                                   |
+| `filter`          | `(args: { date, utcDate, dateStr }) => boolean`                               | —                               | Exclude if callback returns `false`.                                                                                                                            |
+| `extend`          | `Record<string, (args) => unknown>`                                           | `{}`                            | Add custom properties per occurrence.                                                                                                                           |
+| `onError`         | `(error: Error) => unknown`                                                   | —                               | Handle errors without throwing.                                                                                                                                 |
 
 #### Step-based rules
 
