@@ -263,4 +263,50 @@ describe('genRecurDateBasedList - timezone handling', () => {
       assert.strictEqual(list[2].date.getDate(), 3)
     })
   })
+
+  describe('Z token in outputFormat uses numericTimeZone', () => {
+    it('Z reflects positive numericTimeZone, not machine offset', () => {
+      const list = genRecurDateBasedList({
+        start: '2025-06-01T09:00:00',
+        end: 1,
+        rules: [{ unit: 'day', portion: 1 }],
+        numericTimeZone: 5,
+        outputFormat: 'YYYY-MM-DDTHH:MM:SSZ',
+      })
+      assert.strictEqual(list[0].dateStr, '2025-06-01T09:00:00+05:00')
+    })
+
+    it('Z reflects negative numericTimeZone', () => {
+      const list = genRecurDateBasedList({
+        start: '2025-06-01T14:30:00',
+        end: 1,
+        rules: [{ unit: 'day', portion: 1 }],
+        numericTimeZone: -8,
+        outputFormat: 'YYYY-MM-DDTHH:MM:SSZ',
+      })
+      assert.strictEqual(list[0].dateStr, '2025-06-01T14:30:00-08:00')
+    })
+
+    it('Z reflects numericTimeZone 0 as +00:00', () => {
+      const list = genRecurDateBasedList({
+        start: '2025-06-01T12:00:00',
+        end: 1,
+        rules: [{ unit: 'day', portion: 1 }],
+        numericTimeZone: 0,
+        outputFormat: 'HH:MM:SS Z',
+      })
+      assert.strictEqual(list[0].dateStr, '12:00:00 +00:00')
+    })
+
+    it('format without Z is unaffected by numericTimeZone', () => {
+      const list = genRecurDateBasedList({
+        start: '2025-06-01T09:00:00',
+        end: 1,
+        rules: [{ unit: 'day', portion: 1 }],
+        numericTimeZone: 5,
+        outputFormat: 'YYYY-MM-DDTHH:MM:SS',
+      })
+      assert.strictEqual(list[0].dateStr, '2025-06-01T09:00:00')
+    })
+  })
 })

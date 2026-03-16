@@ -83,8 +83,8 @@ function getIntlFormatters(locale: string, useUtc: boolean) {
   return cached
 }
 
-function getTimezoneOffsetString(date: Date): string {
-  const offsetMin = -date.getTimezoneOffset()
+function getTimezoneOffsetString(date: Date, numericTimeZone?: number): string {
+  const offsetMin = numericTimeZone != null ? numericTimeZone * 60 : -date.getTimezoneOffset()
   const sign = offsetMin >= 0 ? '+' : '-'
   const absMin = Math.abs(offsetMin)
   const h = Math.floor(absMin / 60)
@@ -100,9 +100,15 @@ function getTimezoneOffsetString(date: Date): string {
  * @param date - The Date instance to format.
  * @param format - One of the strings in {@link OUTPUT_FORMATS} (e.g. `'YYYY-MM-DD'`, `'YYYY-MM-DD HH:MM'`, `'MM/DD/YYYY HH:MM:SS A'`, `'DD MMM YYYY HH:MM:SS'`, `'MMMM YYYY'`).
  * @param locale - BCP 47 locale string for month and weekday names (default `'en-US'`).
+ * @param numericTimeZone - Optional numeric timezone offset (e.g. 5, -8). When provided, the Z token outputs this offset instead of the machine's.
  * @returns The formatted date string with all tokens replaced.
  */
-export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, locale: string = 'en-US'): string {
+export function formatDateByOutputFormat(
+  date: Date,
+  format: T_OutputFormat,
+  locale: string = 'en-US',
+  numericTimeZone?: number
+): string {
   const year = date.getFullYear()
   const month = date.getMonth()
   const day = date.getDate()
@@ -128,16 +134,19 @@ export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, loc
   const weekdayShort = weekdayShortFmt.format(date)
 
   const dayOfYear = getDayOfYear(date, false)
-  const tzStr = getTimezoneOffsetString(date)
+  const tzStr = getTimezoneOffsetString(date, numericTimeZone)
   const monthPadded = pad(month + 1)
   const dayPadded = pad(day)
 
-  // 1. Weekday (EEEE/EEE) and month names (longest first)
-  let out = format
-    .replace(/EEEE/g, weekdayLong)
-    .replace(/EEE/g, weekdayShort)
-    .replace(/MMMM/g, monthLong)
-    .replace(/MMM/g, monthShort)
+  // Placeholders to protect locale text and AM/PM from numeric M/D replacement
+  const PH_WL = '\x01',
+    PH_WS = '\x02',
+    PH_ML = '\x03',
+    PH_MS = '\x04',
+    PH_AP = '\x05'
+
+  // 1. Weekday (EEEE/EEE) and month names → placeholders (longest first)
+  let out = format.replace(/EEEE/g, PH_WL).replace(/EEE/g, PH_WS).replace(/MMMM/g, PH_ML).replace(/MMM/g, PH_MS)
 
   // 2. Year
   out = out.replace(/YYYY/g, String(year)).replace(/YY/g, String(year).slice(-2))
@@ -145,19 +154,19 @@ export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, loc
   // 3. Day of year
   out = out.replace(/DDD/g, pad3(dayOfYear))
 
-  // 4. Minutes in time context (before month MM): :MM: or :MM. or :MM at end
-  out = out.replace(/:MM(?=:|\.|$)/g, `:${pad(minutes)}`)
+  // 4. Minutes in time context (before month MM): :MM followed by :, ., space, Z or end
+  out = out.replace(/:MM(?=[:. Z]|$)/g, `:${pad(minutes)}`)
 
-  // 5. Hour (HH), seconds (SS), ms (SSS), AM/PM (A)
+  // 5. Hour (HH), seconds (SS), ms (SSS), AM/PM → placeholder
   const hourStr = use12h ? pad(hour12) : pad(hour24)
   out = out
     .replace(/HH/g, hourStr)
     .replace(/SSS/g, pad3(ms))
     .replace(/SS/g, pad(seconds))
-    .replace(/ A$/g, ` ${ampm}`)
-    .replace(/ A /g, ` ${ampm} `)
-    .replace(/^A /g, `${ampm} `)
-    .replace(/ A/g, ` ${ampm}`)
+    .replace(/ A$/g, ` ${PH_AP}`)
+    .replace(/ A /g, ` ${PH_AP} `)
+    .replace(/^A /g, `${PH_AP} `)
+    .replace(/ A/g, ` ${PH_AP}`)
 
   // 6. Month 2-digit (MM in date context)
   out = out.replace(/MM/g, monthPadded)
@@ -171,13 +180,21 @@ export function formatDateByOutputFormat(date: Date, format: T_OutputFormat, loc
   // 9. Timezone Z
   out = out.replace(/ Z$/g, ` ${tzStr}`).replace(/Z$/g, tzStr)
 
+  // 10. Restore placeholders with actual locale text / AM/PM
+  out = out
+    .replace(new RegExp(PH_WL, 'g'), weekdayLong)
+    .replace(new RegExp(PH_WS, 'g'), weekdayShort)
+    .replace(new RegExp(PH_ML, 'g'), monthLong)
+    .replace(new RegExp(PH_MS, 'g'), monthShort)
+    .replace(new RegExp(PH_AP, 'g'), ampm)
+
   return out
 }
 
 export function getDateStr(currentDate: Date, f_Args: T_CoreArgs): string {
   const outputLocale = getOutputLocale(f_Args.localeString)
   if (f_Args.outputFormat) {
-    return formatDateByOutputFormat(currentDate, f_Args.outputFormat, outputLocale)
+    return formatDateByOutputFormat(currentDate, f_Args.outputFormat, outputLocale, f_Args.numericTimeZone)
   }
   if (f_Args.localeString?.lang != null || hasFormatOptions(f_Args.localeString)) {
     return currentDate.toLocaleString(f_Args.localeString!.lang, f_Args.localeString!.formatOptions)

@@ -3,7 +3,7 @@ import { POSTPONERS } from '@/helpers/constants/postponers'
 import { getCronOccurrencesOptimized } from '@/helpers/functions/cron'
 import { cloneDate, getDateStr } from '@/helpers/functions/dates'
 import { checkInvalidData, processInitialArgs } from '@/helpers/functions/lib'
-import { T_Core, T_CoreArgs, T_CoreReturnType, T_Error, T_PostponeArgs } from '@/helpers/types/lib'
+import { T_Core, T_CoreArgs, T_CoreInitialArgs, T_CoreReturnType, T_Error, T_PostponeArgs } from '@/helpers/types/lib'
 
 function buildResultFromDate(
   f_Args: T_CoreArgs,
@@ -40,7 +40,7 @@ function buildResultFromDate(
  * @returns Array of {@link T_CoreReturnType}.
  * @throws {Error} On invalid config or when iteration count exceeds 99_999.
  */
-export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) => {
+export const genRecurDateBasedList = ((args: T_CoreInitialArgs = DEFAULT_ARGS) => {
   const result: T_CoreReturnType[] = []
 
   try {
@@ -74,7 +74,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) => {
 
         if (f_Args.extend) {
           for (const key in f_Args.extend) {
-            currentResult[key] = f_Args.extend[key](callbackArgs)
+            ;(currentResult as Record<string, unknown>)[key] = f_Args.extend[key](callbackArgs)
           }
         }
 
@@ -107,7 +107,7 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) => {
 
         if (f_Args.extend) {
           for (const key in f_Args.extend) {
-            currentResult[key] = f_Args.extend[key](callbackArgs)
+            ;(currentResult as Record<string, unknown>)[key] = f_Args.extend[key](callbackArgs)
           }
         }
 
@@ -127,4 +127,4 @@ export const genRecurDateBasedList: T_Core = (args = DEFAULT_ARGS) => {
   }
 
   return result
-}
+}) as T_Core

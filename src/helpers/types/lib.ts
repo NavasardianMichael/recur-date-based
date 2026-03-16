@@ -23,12 +23,11 @@ type T_LocaleString = {
   formatOptions?: Intl.DateTimeFormatOptions
 }
 
-export type T_CoreReturnType = {
+export type T_CoreReturnType<T = {}> = {
   date: Date
   utcDate: Date
   dateStr: string
-  [key: string]: unknown
-}
+} & T
 
 export type T_CallbackArgs = Pick<T_CoreReturnType, 'date' | 'utcDate' | 'dateStr'>
 
@@ -61,7 +60,11 @@ export type T_CoreArgs = {
   filter?: T_ArgsBase['filter']
 }
 
-export type T_Core = (args: T_CoreInitialArgs) => T_CoreReturnType[]
+export type T_Core = <E extends Record<string, unknown> = {}>(
+  args?: Omit<T_CoreInitialArgs, 'extend'> & {
+    extend?: { [K in keyof E]: (args: T_CallbackArgs) => E[K] }
+  }
+) => T_CoreReturnType<E>[]
 
 export type T_IntervalUnit = ObjectValuesMap<typeof INTERVAL_UNITS>
 export type T_Direction = ObjectValuesMap<typeof DIRECTIONS>

@@ -2,4 +2,11 @@ export { genRecurDateBasedList } from '@/main'
 export { formatDateByOutputFormat as formatDate } from '@/helpers/functions/dates'
 export { OUTPUT_FORMATS } from '@/helpers/constants/formats'
 export { DIRECTIONS, INTERVAL_UNITS } from '@/helpers/constants/commons'
-export type { T_OutputFormat, T_Rule, T_CoreInitialArgs, T_IntervalUnit } from '@/helpers/types/lib'
+export type {
+  T_OutputFormat,
+  T_Rule,
+  T_CoreInitialArgs,
+  T_CoreReturnType,
+  T_IntervalUnit,
+  T_Direction,
+} from '@/helpers/types/lib'

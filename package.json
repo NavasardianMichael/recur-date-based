@@ -54,6 +54,7 @@
   "description": "Generate recurring dates and extra props based on them.",
   "devDependencies": {
     "@size-limit/file": "^11.2.0",
+    "@types/node": "^25.5.0",
     "cross-env": "^7.0.3",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",

@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src/**/*", "test/**/*"]
+}
