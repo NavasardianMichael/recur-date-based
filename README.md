@@ -103,13 +103,15 @@ genRecurDateBasedList({
 
 Each item has:
 
-| Property  | Type     | Description                                                                              |
-| --------- | -------- | ---------------------------------------------------------------------------------------- |
-| `date`    | `Date`   | Wall-clock date in target timezone. Use normal getters (`getHours()`, `getDay()`, etc.). |
-| `dateStr` | `string` | String representation of `date` per `outputFormat` or locale.                            |
-| `utcDate` | `Date`   | The actual UTC moment (wall-clock minus `numericTimeZone` offset).                       |
+| Property  | Type     | Description                                                                                                                                                                                                                                                                                                          |
+| --------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dateStr` | `string` | The wall-clock date/time as a formatted string. Controlled by `outputFormat` or `localeString`.                                                                                                                                                                                                                      |
+| `date`    | `Date`   | The same wall-clock date/time as a JS Date object. `date.getHours()` returns the same hour shown in `dateStr`. **Note:** `JSON.stringify` calls `.toISOString()`, which outputs the internal UTC epoch (with the `Z` suffix). This may look different from `dateStr`, but they represent the same wall-clock moment. |
+| `utcDate` | `Date`   | The actual UTC instant, computed as wall-clock time minus `numericTimeZone`. Only differs from `date` when `numericTimeZone` is explicitly set to a value different from the machine timezone.                                                                                                                       |
 
 Plus any keys from `extend`.
+
+> **Tip:** `dateStr` and `date` always agree. `utcDate` only differs when `numericTimeZone` is set to a value that differs from the machine timezone.
 
 ---
 
