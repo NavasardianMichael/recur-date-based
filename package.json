@@ -34,7 +34,7 @@
     "cleardeps": "rm -rf node_modules",
     "prepare": "husky"
   },
-  "name": "recur-date-based"
+  "name": "recur-date-based",
   "author": "Michael Navasardyan",
   "keywords": [
     "recurrence",
