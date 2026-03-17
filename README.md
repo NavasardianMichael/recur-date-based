@@ -10,6 +10,12 @@ Generate recurring dates and extra props based on them. Function-based, fully-ty
 
 ---
 
+## Playground
+
+> 🎮 **Try it live:** [CodeSandbox](https://codesandbox.io/p/sandbox/react-typescript-forked-9fps7r?file=%2Fsrc%2FApp.tsx)
+
+---
+
 ## Install
 
 ```bash
