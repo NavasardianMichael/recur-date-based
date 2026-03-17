@@ -1,6 +1,10 @@
 {
   "version": "2.0.0",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NavasardianMichael/recur-date-based"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
@@ -30,7 +34,7 @@
     "cleardeps": "rm -rf node_modules",
     "prepare": "husky"
   },
-  "name": "recur-date-based",
+  "name": "recur-date-based"
   "author": "Michael Navasardyan",
   "keywords": [
     "recurrence",
