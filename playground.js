@@ -1,9 +1,10 @@
 const package = require('./dist')
 const list = package.genRecurDateBasedList({
-  start: '2024-01-03',
-  end: '2024-01-11',
-  rules: '0 9 * * 1-3',
-  outputFormat: 'EEEE, D MMM YYYY HH:MM:SS',
+  start: '2024-01-01',
+  end: 2,
+  rules: [{ unit: 'day', portion: 1 }],
+  outputFormat: 'YYYY-MM-DD',
+  numericTimeZone: 4,
 })
 console.log(list)
 
